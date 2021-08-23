@@ -9,10 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,5 +22,21 @@ public class MenuGiorno extends BaseEntity{
 
     @OneToMany
     @JoinColumn(name="id_pietanza")
-    private Set<Pietanza> pietanze;
+    private Set<Pietanza> pietanze = new HashSet<>();
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Set<Pietanza> getPietanze() {
+        return pietanze;
+    }
+
+    public void setPietanze(Set<Pietanza> pietanze) {
+        this.pietanze = pietanze;
+    }
 }

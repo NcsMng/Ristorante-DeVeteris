@@ -7,7 +7,7 @@ import cucina.services.CucinaService;
 import notificationsmanager.enums.StatoOrdinazione;
 import notificationsmanager.model.Ordinazione;
 import notificationsmanager.model.PiattoOrdinazione;
-import notificationsmanager.repositories.OrdinazioniRepository;
+import notificationsmanager.repository.OrdinazioniRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

@@ -1,4 +1,4 @@
-package notificationsmanager.repositories;
+package notificationsmanager.repository;
 
 import notificationsmanager.model.PiattoOrdinazione;
 import org.springframework.data.jpa.repository.JpaRepository;

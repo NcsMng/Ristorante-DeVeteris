@@ -1,5 +1,9 @@
 package magazzino.services;
 
-public interface MateriaPrimaService {
+import magazzino.model.MateriaPrima;
+import magazzino.requests.MateriaPrimaRequest;
 
+public interface MateriaPrimaService {
+    MateriaPrima persistMateriaPrima(MateriaPrimaRequest pietanzaRequest);
+    boolean deleteMateriaPrima(String id);
 }

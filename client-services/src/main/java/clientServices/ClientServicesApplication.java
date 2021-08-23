@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(scanBasePackages={"notificationsmanager.repositories","clientServices.mapper"})
+@SpringBootApplication(scanBasePackages={"notificationsmanager.repository","clientServices.mapper"})
 @EnableScheduling
 @EnableAsync
 public class ClientServicesApplication {

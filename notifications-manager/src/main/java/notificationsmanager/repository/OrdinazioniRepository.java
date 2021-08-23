@@ -1,10 +1,9 @@
-package notificationsmanager.repositories;
+package notificationsmanager.repository;
 
 import notificationsmanager.enums.StatoOrdinazione;
 import notificationsmanager.model.Ordinazione;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

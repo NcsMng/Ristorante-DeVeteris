@@ -6,7 +6,7 @@ import clientServices.mapper.OrdinazioneMapper;
 import clientServices.services.OrdinazioneService;
 import lombok.extern.slf4j.Slf4j;
 import notificationsmanager.model.Ordinazione;
-import notificationsmanager.repositories.OrdinazioniRepository;
+import notificationsmanager.repository.OrdinazioniRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 

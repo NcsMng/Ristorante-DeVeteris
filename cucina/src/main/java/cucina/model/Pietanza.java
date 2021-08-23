@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-@Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,4 +31,43 @@ public class Pietanza extends BaseEntity{
     @Column(name = "descrizione", length = 500)
     private String descrizione;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getPrezzo() {
+        return prezzo;
+    }
+
+    public void setPrezzo(double prezzo) {
+        this.prezzo = prezzo;
+    }
+
+    public Integer getTempoPreparazioneMinuti() {
+        return tempoPreparazioneMinuti;
+    }
+
+    public void setTempoPreparazioneMinuti(Integer tempoPreparazioneMinuti) {
+        this.tempoPreparazioneMinuti = tempoPreparazioneMinuti;
+    }
+
+    public String getNomePiatto() {
+        return nomePiatto;
+    }
+
+    public void setNomePiatto(String nomePiatto) {
+        this.nomePiatto = nomePiatto;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
 }

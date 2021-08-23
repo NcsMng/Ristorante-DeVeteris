@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Data
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,4 +27,44 @@ public class PiattoOrdinazione extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="id_ordinazione", nullable=false)
     private Ordinazione ordinazione;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getCodicePiatto() {
+        return codicePiatto;
+    }
+
+    public void setCodicePiatto(String codicePiatto) {
+        this.codicePiatto = codicePiatto;
+    }
+
+    public Integer getQuantita() {
+        return quantita;
+    }
+
+    public void setQuantita(Integer quantita) {
+        this.quantita = quantita;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Ordinazione getOrdinazione() {
+        return ordinazione;
+    }
+
+    public void setOrdinazione(Ordinazione ordinazione) {
+        this.ordinazione = ordinazione;
+    }
 }

@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity(name = "ordini_materia_prima")
-@Data
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,16 +19,6 @@ public class OrdineMateriaPrima {
 
     @Column(name = "quantita_ordinata")
     private Double quantitaOrdinata;
-
-    @Column(name = "data_ordinazione")
-    private Date dataOrdinazione;
-
-    @Column(name = "data_consegna")
-    private Date dataConsegna;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "stato_ordine")
-    private StatoOrdine statoOrdine;
 
     @ManyToOne
     @JoinColumn(name = "id_ordine")
@@ -42,4 +31,44 @@ public class OrdineMateriaPrima {
     @ManyToOne
     @JoinColumn(name = "id_fornitore")
     private Fornitore fornitore;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Double getQuantitaOrdinata() {
+        return quantitaOrdinata;
+    }
+
+    public void setQuantitaOrdinata(Double quantitaOrdinata) {
+        this.quantitaOrdinata = quantitaOrdinata;
+    }
+
+    public Ordine getOrdine() {
+        return ordine;
+    }
+
+    public void setOrdine(Ordine ordine) {
+        this.ordine = ordine;
+    }
+
+    public MateriaPrima getMateriaPrima() {
+        return materiaPrima;
+    }
+
+    public void setMateriaPrima(MateriaPrima materiaPrima) {
+        this.materiaPrima = materiaPrima;
+    }
+
+    public Fornitore getFornitore() {
+        return fornitore;
+    }
+
+    public void setFornitore(Fornitore fornitore) {
+        this.fornitore = fornitore;
+    }
 }
