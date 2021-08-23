@@ -1,12 +1,14 @@
 package clientServices.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
 
 @Data
-@AllArgsConstructor
-public class PiattoOrdinazioneDto {
+public class PiattoOrdinazioneRequest {
+    @NonNull
     private String codicePiatto;
+    @NonNull
     private Integer quantita;
+
     private String note;
 }

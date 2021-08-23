@@ -6,7 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrdinazioniRepository extends JpaRepository<Ordinazione, Integer> {
     List<Ordinazione> findAllByStatoNot(StatoOrdinazione stato);
+    Optional<Ordinazione> findByUuidEquals(String uuid);
+    boolean deleteByUuidEquals(String uiid);
+    boolean deleteByIdEquals(Integer id);
 }

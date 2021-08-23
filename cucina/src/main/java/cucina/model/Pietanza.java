@@ -1,7 +1,9 @@
 package cucina.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,8 @@ import javax.persistence.Id;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Pietanza extends BaseEntity{
 
     @Id
@@ -20,7 +24,7 @@ public class Pietanza extends BaseEntity{
     private double prezzo;
 
     @Column(name = "tempo_preparazione_minuti")
-    private int tempoPreparazioneMinuti;
+    private Integer tempoPreparazioneMinuti;
 
     @Column(name = "nome_piatto")
     private String nomePiatto;
