@@ -1,10 +1,5 @@
 package cucina.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -13,16 +8,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class MenuGiorno extends BaseEntity{
+public class MenuGiorno extends BaseEntity {
     @Id
     private Integer id;
 
     @OneToMany
-    @JoinColumn(name="id_pietanza")
+    @JoinColumn(name = "id_pietanza")
     private Set<Pietanza> pietanze = new HashSet<>();
+
+    public MenuGiorno(Integer id, Set<Pietanza> pietanze) {
+        this.id = id;
+        this.pietanze = pietanze;
+    }
+
+    public MenuGiorno() {
+    }
 
     public Integer getId() {
         return id;

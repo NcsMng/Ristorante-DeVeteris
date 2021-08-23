@@ -1,14 +1,22 @@
 package cucina.dto;
 
-import lombok.Data;
-
-
 public class PietanzaRequest {
     private String id;
     private Double prezzo;
     private Integer tempoPreparazioneMinuti;
     private String nomePiatto;
     private String descrizione;
+
+    public PietanzaRequest(String id, Double prezzo, Integer tempoPreparazioneMinuti, String nomePiatto, String descrizione) {
+        this.id = id;
+        this.prezzo = prezzo;
+        this.tempoPreparazioneMinuti = tempoPreparazioneMinuti;
+        this.nomePiatto = nomePiatto;
+        this.descrizione = descrizione;
+    }
+
+    public PietanzaRequest() {
+    }
 
     public String getId() {
         return id;

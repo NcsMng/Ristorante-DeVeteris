@@ -1,16 +1,18 @@
 package clientServices.dto;
 
-import lombok.Data;
-import lombok.NonNull;
-
 import java.util.List;
 
 public class OrdinazioneRequest {
     private Integer id;
     private String note;
-    @NonNull
-    private List<PiattoOrdinazioneDto> piattiOrdinazione;
+    private List<PiattoOrdinazioneRequest> piattiOrdinazione;
 
+    public OrdinazioneRequest(Integer id, String note, List<PiattoOrdinazioneRequest> piattiOrdinazione) {
+        this.id = id;
+        this.note = note;
+        this.piattiOrdinazione = piattiOrdinazione;
+    }
+    public OrdinazioneRequest(){}
     public Integer getId() {
         return id;
     }
@@ -27,11 +29,11 @@ public class OrdinazioneRequest {
         this.note = note;
     }
 
-    public List<PiattoOrdinazioneDto> getPiattiOrdinazione() {
+    public List<PiattoOrdinazioneRequest> getPiattiOrdinazione() {
         return piattiOrdinazione;
     }
 
-    public void setPiattiOrdinazione(List<PiattoOrdinazioneDto> piattiOrdinazione) {
+    public void setPiattiOrdinazione(List<PiattoOrdinazioneRequest> piattiOrdinazione) {
         this.piattiOrdinazione = piattiOrdinazione;
     }
 }

@@ -1,26 +1,18 @@
 package cucina.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class Pietanza extends BaseEntity{
+public class Pietanza extends BaseEntity {
 
     @Id
     @Column(length = 5)
     private String id;
 
     @Column(name = "prezzo")
-    private double prezzo;
+    private Double prezzo;
 
     @Column(name = "tempo_preparazione_minuti")
     private Integer tempoPreparazioneMinuti;
@@ -31,6 +23,17 @@ public class Pietanza extends BaseEntity{
     @Column(name = "descrizione", length = 500)
     private String descrizione;
 
+    public Pietanza(String id, Double prezzo, Integer tempoPreparazioneMinuti, String nomePiatto, String descrizione) {
+        this.id = id;
+        this.prezzo = prezzo;
+        this.tempoPreparazioneMinuti = tempoPreparazioneMinuti;
+        this.nomePiatto = nomePiatto;
+        this.descrizione = descrizione;
+    }
+
+    public Pietanza() {
+    }
+
     public String getId() {
         return id;
     }
@@ -39,11 +42,11 @@ public class Pietanza extends BaseEntity{
         this.id = id;
     }
 
-    public double getPrezzo() {
+    public Double getPrezzo() {
         return prezzo;
     }
 
-    public void setPrezzo(double prezzo) {
+    public void setPrezzo(Double prezzo) {
         this.prezzo = prezzo;
     }
 

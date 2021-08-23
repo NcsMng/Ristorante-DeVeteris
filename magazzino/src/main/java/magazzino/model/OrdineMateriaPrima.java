@@ -1,20 +1,15 @@
 package magazzino.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import magazzino.enums.StatoOrdine;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
 
 @Entity(name = "ordini_materia_prima")
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
-public class OrdineMateriaPrima {
+public class OrdineMateriaPrima implements Serializable {
+    static final long serialVersionUID = 5123213L;
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "quantita_ordinata")
@@ -22,15 +17,29 @@ public class OrdineMateriaPrima {
 
     @ManyToOne
     @JoinColumn(name = "id_ordine")
+    @JsonManagedReference
     private Ordine ordine;
 
     @ManyToOne
     @JoinColumn(name = "id_materia_prima")
+    @JsonManagedReference
     private MateriaPrima materiaPrima;
 
     @ManyToOne
     @JoinColumn(name = "id_fornitore")
+    @JsonManagedReference
     private Fornitore fornitore;
+
+    public OrdineMateriaPrima(Integer id, Double quantitaOrdinata, Ordine ordine, MateriaPrima materiaPrima, Fornitore fornitore) {
+        this.id = id;
+        this.quantitaOrdinata = quantitaOrdinata;
+        this.ordine = ordine;
+        this.materiaPrima = materiaPrima;
+        this.fornitore = fornitore;
+    }
+
+    public OrdineMateriaPrima() {
+    }
 
     public Integer getId() {
         return id;

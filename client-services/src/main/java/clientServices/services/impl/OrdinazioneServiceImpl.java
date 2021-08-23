@@ -4,16 +4,15 @@ import clientServices.dto.OrdinazioneRequest;
 import clientServices.exception.OrdinazioneNonTrovataException;
 import clientServices.mapper.OrdinazioneMapper;
 import clientServices.services.OrdinazioneService;
-import lombok.extern.slf4j.Slf4j;
 import notificationsmanager.model.Ordinazione;
 import notificationsmanager.repository.OrdinazioniRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class OrdinazioneServiceImpl implements OrdinazioneService {
 
     private final OrdinazioneMapper ordinazioneMapper;
@@ -27,6 +26,7 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
     //Save or Update Entity via DTO
     //Metodo per Camerieri
     @Override
+    @Transactional
     public Ordinazione persistOrdinazione(OrdinazioneRequest ordinazioneRequest) {
         return Optional.ofNullable(ordinazioneRequest.getId())
                 .map(ordinazioneId ->
@@ -39,6 +39,7 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
                         .save(ordinazioneMapper.getEntityFromRequest(ordinazioneRequest)));
     }
     @Override
+    @Transactional
     //Metodo per Clienti. Si puo' modificare solo se si ha l'uuid dell'ordine, altrimenti si crea nuovo ordine
     public Ordinazione persistOrdinazione(OrdinazioneRequest ordinazioneRequest, String uuidOrdine) {
         if(StringUtils.isNotBlank(uuidOrdine)){

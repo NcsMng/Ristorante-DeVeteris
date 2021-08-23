@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,14 +43,14 @@ public class CucinaServiceImpl implements CucinaService {
             });
         }
     }
-
+    @Transactional
     public void processNotificationInAttesa(Integer id) {
         ordinazioniRepository.findById(id)
                 .ifPresent(ordinazione -> {
                     ordinazione.setStato(StatoOrdinazione.IN_CARICO);
                 });
     }
-
+    @Transactional
     public void processNotificationinCarico(Integer id) {
         ordinazioniRepository.findById(id)
                 .ifPresent(ordinazione -> {

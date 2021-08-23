@@ -1,15 +1,19 @@
 package clientServices.dto;
 
-import lombok.Data;
-import lombok.NonNull;
-
 public class PiattoOrdinazioneRequest {
-    @NonNull
     private String codicePiatto;
-    @NonNull
     private Integer quantita;
 
     private String note;
+
+    public PiattoOrdinazioneRequest(String codicePiatto, Integer quantita, String note) {
+        this.codicePiatto = codicePiatto;
+        this.quantita = quantita;
+        this.note = note;
+    }
+
+    public PiattoOrdinazioneRequest() {
+    }
 
     public String getCodicePiatto() {
         return codicePiatto;

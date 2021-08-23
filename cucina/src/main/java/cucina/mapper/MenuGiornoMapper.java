@@ -1,6 +1,5 @@
 package cucina.mapper;
 
-import cucina.dto.MenuGiornoDto;
 import cucina.dto.MenuGiornoRequest;
 import cucina.model.MenuGiorno;
 import org.mapstruct.Mapper;

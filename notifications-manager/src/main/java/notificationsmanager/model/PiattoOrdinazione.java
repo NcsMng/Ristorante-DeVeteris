@@ -1,16 +1,8 @@
 package notificationsmanager.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 
 @Entity
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
 public class PiattoOrdinazione extends BaseEntity {
     @Id
     private Integer id;
@@ -25,8 +17,20 @@ public class PiattoOrdinazione extends BaseEntity {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name="id_ordinazione", nullable=false)
+    @JoinColumn(name = "id_ordinazione", nullable = false)
     private Ordinazione ordinazione;
+
+
+    public PiattoOrdinazione() {
+    }
+
+    public PiattoOrdinazione(Integer id, String codicePiatto, Integer quantita, String note, Ordinazione ordinazione) {
+        this.id = id;
+        this.codicePiatto = codicePiatto;
+        this.quantita = quantita;
+        this.note = note;
+        this.ordinazione = ordinazione;
+    }
 
     public Integer getId() {
         return id;

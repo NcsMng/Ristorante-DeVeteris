@@ -1,26 +1,24 @@
 package magazzino.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import magazzino.enums.StatoOrdine;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "ordini")
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class Ordine extends BaseEntity {
+public class Ordine extends BaseEntity implements Serializable {
+    static final long serialVersionUID = 3123213L;
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "ordine")
+    @OneToMany(mappedBy = "ordine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<OrdineMateriaPrima> ordiniMateriaPrima = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
@@ -32,6 +30,17 @@ public class Ordine extends BaseEntity {
 
     @Column(name = "data_consegna")
     private Date dataConsegna;
+
+    public Ordine(Integer id, Set<OrdineMateriaPrima> ordiniMateriaPrima, StatoOrdine statoOrdine, Date dataOrdine, Date dataConsegna) {
+        this.id = id;
+        this.ordiniMateriaPrima = ordiniMateriaPrima;
+        this.statoOrdine = statoOrdine;
+        this.dataOrdine = dataOrdine;
+        this.dataConsegna = dataConsegna;
+    }
+
+    public Ordine() {
+    }
 
     public Integer getId() {
         return id;
@@ -72,4 +81,6 @@ public class Ordine extends BaseEntity {
     public void setDataConsegna(Date dataConsegna) {
         this.dataConsegna = dataConsegna;
     }
+
+
 }

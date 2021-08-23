@@ -1,37 +1,41 @@
 package magazzino.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "materia_prima")
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class MateriaPrima extends BaseEntity{
-
+public class MateriaPrima extends BaseEntity implements Serializable {
+    static final long serialVersionUID = 223532324L;
     @Id
     private String id;
 
     @Column(name = "nome")
     private String nome;
 
-    @Column(name = "quantita")
+    @Column(name = "quantita",precision = 2)
     private Double quantita;
 
     @Column(name = "descrizione")
     private String descrizione;
 
-    @OneToMany(mappedBy = "materiaPrima")
+    @OneToMany(mappedBy = "materiaPrima",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<OrdineMateriaPrima> ordiniMateriaPrima = new HashSet<>();
+
+    public MateriaPrima(String id, String nome, Double quantita, String descrizione, Set<OrdineMateriaPrima> ordiniMateriaPrima) {
+        this.id = id;
+        this.nome = nome;
+        this.quantita = quantita;
+        this.descrizione = descrizione;
+        this.ordiniMateriaPrima = ordiniMateriaPrima;
+    }
+
+    public MateriaPrima() {
+    }
 
     public String getId() {
         return id;

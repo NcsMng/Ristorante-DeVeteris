@@ -8,6 +8,7 @@ import cucina.repository.PietanzaRepository;
 import cucina.services.PietanzeService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -22,6 +23,7 @@ public class PietanzeServiceImpl implements PietanzeService {
 
     //Metodo solo per chef e manager
     @Override
+    @Transactional
     public Pietanza persistPietanza(PietanzaRequest pietanzaRequest) {
         return Optional.ofNullable(pietanzaRequest.getId())
                 .map(pietanzaId ->

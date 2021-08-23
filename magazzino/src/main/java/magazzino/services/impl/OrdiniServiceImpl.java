@@ -18,6 +18,7 @@ import magazzino.services.MateriaPrimaService;
 import magazzino.services.OrdiniService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class OrdiniServiceImpl implements OrdiniService {
     }
 
     @Override
+    @Transactional
     public Ordine persistOrdine(OrdineRequest ordine) {
         return Optional.ofNullable(ordine.getId())
                 .map(idOrdine -> {
@@ -53,6 +55,7 @@ public class OrdiniServiceImpl implements OrdiniService {
     }
 
     @Override
+    @Transactional
     public ManipulateOrdineMateriePrimeResponse manipulateOrdineMateriePrime(OrdineMateriaPrimaRequest ordineMateriaPrimaRequest) {
         ManipulateOrdineMateriePrimeResponse response = new ManipulateOrdineMateriePrimeResponse();
 
@@ -84,17 +87,19 @@ public class OrdiniServiceImpl implements OrdiniService {
                                     Optional<MateriaPrima> optionalMateriaPrima = materiaPrimaRepository
                                             .findById(idMP);
                                     if (optionalMateriaPrima.isPresent()) {
+
                                         ordineMateriaPrima.setMateriaPrima(optionalMateriaPrima.get());
                                         ordineMateriaPrima.setFornitore(fornitore);
                                         ordineMateriaPrima.setOrdine(ordine);
                                         ordineMateriaPrima.setQuantitaOrdinata(qtaMP);
+                                        ordiniMateriaPrima.add(ordineMateriaPrima);
                                     } else {
                                         response.getIdMPNotFound().add(idMP);
                                     }
 
                                 }
                             });
-                    return ordine;
+                    return ordineRepository.save(ordine);
                 })
                 .orElseThrow(() -> new MagazzinoException("Nessun id fornito per l'ordine da manipolare!"));
         response.setOrdine(ordineToReturn);

@@ -9,6 +9,8 @@ import magazzino.services.MateriaPrimaService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class MateriaPrimaServiceImpl implements MateriaPrimaService {
     private final MateriaPrimaMapper materiaPrimaMapper;
@@ -20,6 +22,7 @@ public class MateriaPrimaServiceImpl implements MateriaPrimaService {
     }
 
     @Override
+    @Transactional
     public MateriaPrima persistMateriaPrima(MateriaPrimaRequest materiaPrimaRequest) {
         if (StringUtils.isNotBlank(materiaPrimaRequest.getId())) {
             MateriaPrima materiaPrima = materiaPrimaRepository.findById(materiaPrimaRequest.getId())

@@ -1,9 +1,5 @@
 package notificationsmanager.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import notificationsmanager.enums.StatoOrdinazione;
 
 import javax.persistence.*;
@@ -12,9 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
 public class Ordinazione extends BaseEntity {
 
     @Id
@@ -26,8 +19,8 @@ public class Ordinazione extends BaseEntity {
     @Transient
     private final String uuid = UUID.randomUUID().toString();
 
-    @Column(name = "costo")
-    private double costo;
+    @Column(name = "costo",precision = 2)
+    private Double costo;
 
     @Column(name = "stato", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -57,11 +50,11 @@ public class Ordinazione extends BaseEntity {
         return uuid;
     }
 
-    public double getCosto() {
+    public Double getCosto() {
         return costo;
     }
 
-    public void setCosto(double costo) {
+    public void setCosto(Double costo) {
         this.costo = costo;
     }
 

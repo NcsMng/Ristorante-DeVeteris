@@ -1,9 +1,5 @@
 package magazzino.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -14,9 +10,6 @@ import javax.persistence.Version;
 import java.util.Date;
 
 
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
 public abstract class BaseEntity {
 
     @Column(name = "CREATED_DATE", nullable = false)
@@ -31,6 +24,15 @@ public abstract class BaseEntity {
 
     @Version
     private Long version;
+
+    public BaseEntity(Date creationTime, Date updatedDate, Long version) {
+        this.creationTime = creationTime;
+        this.updatedDate = updatedDate;
+        this.version = version;
+    }
+
+    public BaseEntity() {
+    }
 
     public Date getCreationTime() {
         return creationTime;

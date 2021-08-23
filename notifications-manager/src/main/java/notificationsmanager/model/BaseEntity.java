@@ -1,19 +1,17 @@
 package notificationsmanager.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Version;
+import java.io.Serializable;
 import java.util.Date;
 
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
-public abstract class BaseEntity {
+
+public abstract class BaseEntity implements Serializable {
 
     @Column(name = "CREATED_DATE", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -27,6 +25,13 @@ public abstract class BaseEntity {
 
     @Version
     private Long version;
+
+    public BaseEntity(Date creationTime, Date updatedDate, Long version) {
+        this.creationTime = creationTime;
+        this.updatedDate = updatedDate;
+        this.version = version;
+    }
+    public BaseEntity(){}
 
     public Date getCreationTime() {
         return creationTime;
