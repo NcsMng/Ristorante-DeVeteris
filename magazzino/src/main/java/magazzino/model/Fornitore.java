@@ -60,4 +60,5 @@ public class Fornitore extends BaseEntity implements Serializable {
     public void setOrdiniMateriaPrima(Set<OrdineMateriaPrima> ordiniMateriaPrima) {
         this.ordiniMateriaPrima = ordiniMateriaPrima;
     }
+
 }
