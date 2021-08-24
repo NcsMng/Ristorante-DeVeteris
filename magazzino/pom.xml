@@ -8,7 +8,7 @@
         <version>2.3.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ristorante-de-veteris</groupId>
+    <groupId>ristorante.de.veteris</groupId>
     <artifactId>magazzino</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>magazzino</name>
@@ -46,11 +46,15 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>risotarante-de-veteris</groupId>
+            <groupId>ristorante.de.veteris</groupId>
             <artifactId>permessi</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>ristorante.de.veteris</groupId>
+            <artifactId>commons</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
