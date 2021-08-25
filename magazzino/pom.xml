@@ -8,10 +8,9 @@
         <version>2.3.5.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ristorante.de.veteris</groupId>
+    <groupId>com.deveteris.magazzino</groupId>
     <artifactId>magazzino</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>magazzino</name>
     <properties>
         <java.version>1.8</java.version>
         <mapstruct.version>1.4.1.Final</mapstruct.version>
@@ -28,7 +27,6 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -46,12 +44,7 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
-            <groupId>ristorante.de.veteris</groupId>
-            <artifactId>permessi</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ristorante.de.veteris</groupId>
+            <groupId>com.deveteris.commons</groupId>
             <artifactId>commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -83,8 +76,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                </configuration>
             </plugin>
         </plugins>
     </build>

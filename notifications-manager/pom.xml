@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>ristorante.de.veteris</groupId>
+	<groupId>com.deveteris.notificationsmanager</groupId>
 	<artifactId>notifications-manager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>notifications-manager</name>
+
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -24,22 +24,8 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	</dependencies>
 
 </project>

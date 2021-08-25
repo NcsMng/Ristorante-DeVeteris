@@ -6,10 +6,9 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.5.RELEASE</version>
-		<relativePath/>
-
 	</parent>
-	<groupId>ristorante.de.veteris</groupId>
+
+	<groupId>com.deveteris.clientservices</groupId>
 	<artifactId>client-services</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>client-services</name>
@@ -21,12 +20,17 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>ristorante.de.veteris</groupId>
+			<groupId>com.deveteris.permessi</groupId>
+			<artifactId>permessi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.deveteris.commons</groupId>
 			<artifactId>commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>ristorante.de.veteris</groupId>
+			<groupId>com.deveteris.notificationsmanager</groupId>
 			<artifactId>notifications-manager</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
@@ -34,11 +38,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>ristorante-de-veteris</groupId>-->
-<!--			<artifactId>permessi</artifactId>-->
-<!--			<version>0.0.1-SNAPSHOT</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -53,7 +52,6 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -69,6 +67,16 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>resources</directory>
+				<targetPath>${project.build.outputDirectory}</targetPath>
+				<includes>
+					<include>notifications-db.properties</include>
+					<include>permissions-db.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -79,9 +87,8 @@
 					<target>${java.version}</target>
 					<compilerArgs>
 						<compilerArg>
-							-Amapstruct.defaultComponentModel=spring,
-							-Amapstruct.verbose=true
-						</compilerArg>
+							-Amapstruct.defaultComponentModel=spring
+							-Amapstruct.verbose=true</compilerArg>
 					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>
@@ -95,9 +102,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
