@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/staff/ordini/**").hasAnyAuthority("CAMERIERE", "CUOCO", "MANAGER")
-                .antMatchers("/clienti/ordini/**").hasAnyAuthority("CAMERIERE", "CUOCO", "MANAGER", "GENERIC_USER")
+                .antMatchers("/cucina/menu/**").hasAnyAuthority("CUOCO", "MANAGER")
+                .antMatchers("/cucina/pietanze/**").hasAnyAuthority("CUOCO", "MANAGER")
                 .anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

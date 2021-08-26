@@ -1,7 +1,7 @@
 package com.deveteris.cucina.controller;
 
 import com.deveteris.commons.response.DeVeterisResponse;
-import com.deveteris.cucina.dto.MenuGiornoDto;
+import com.deveteris.cucina.dto.PietanzaDto;
 import com.deveteris.cucina.request.MenuGiornoRequest;
 import com.deveteris.cucina.response.PersistMenuGiornoResponse;
 import com.deveteris.cucina.services.MenuGiornoService;
@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
+import java.util.Set;
 @RestController
 @RequestMapping("/cucina/menu")
 public class MenuController {
@@ -33,12 +35,66 @@ public class MenuController {
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
     @PostMapping(path = "/persist", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeVeterisResponse<PersistMenuGiornoResponse>> getOrdine(@RequestBody MenuGiornoRequest menuGiornoRequest){
+    public ResponseEntity<DeVeterisResponse<PersistMenuGiornoResponse>> getOrdine(@RequestBody Set<MenuGiornoRequest> menuGiornoRequest){
         LOGGER.debug("New request to /menu/persist");
-        PersistMenuGiornoResponse responseBody = menuGiornoService.persistMenu(menuGiornoRequest);
+        PersistMenuGiornoResponse responseBody = menuGiornoService.persistMenu(new HashSet<>(menuGiornoRequest));
         DeVeterisResponse<PersistMenuGiornoResponse> response = new DeVeterisResponse<>();
         response.setBody(responseBody);
         LOGGER.debug("Sending response from /menu/persist");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "/cucina/menu/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Piatto dal menu cancellato correttamente", response = Integer.class),
+            @ApiResponse(code = 500, message = "Errore di sistema"),
+            @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
+            @ApiResponse(code = 401, message = "Utente non autorizzato"),
+            @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
+    })
+    @PostMapping(path = "/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeVeterisResponse<Boolean>> deletePiattoFromMenu(@PathVariable("idPiatto") String idPiatto){
+        LOGGER.debug("New request to /delete/{idPiatto}");
+        Boolean resultOfDelete = menuGiornoService.deletePiattoFromMenu(idPiatto);
+        DeVeterisResponse<Boolean> response = new DeVeterisResponse<>();
+        response.setBody(resultOfDelete);
+        LOGGER.debug("Sending response from /delete/{idPiatto}");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "/cucina/menu/delete", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Menu cancellato correttamente", response = Boolean.class),
+            @ApiResponse(code = 500, message = "Errore di sistema"),
+            @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
+            @ApiResponse(code = 401, message = "Utente non autorizzato"),
+            @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
+    })
+    @PostMapping(path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeVeterisResponse<Boolean>> deletePiattoFromMenu(){
+        LOGGER.debug("New request to /delete");
+        Boolean deletedAll = menuGiornoService.deleteMenu();
+        DeVeterisResponse<Boolean> response = new DeVeterisResponse<>();
+        response.setBody(deletedAll);
+        LOGGER.debug("Sending response from /delete");
+        return ResponseEntity.ok(response);
+    }
+
+    @ApiOperation(value = "/cucina/menu/persist/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Menu cancellato correttamente", response = Boolean.class),
+            @ApiResponse(code = 500, message = "Errore di sistema"),
+            @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
+            @ApiResponse(code = 401, message = "Utente non autorizzato"),
+            @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
+    })
+    @PostMapping(path = "/persist/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeVeterisResponse<PietanzaDto>> persistPiatto(@PathVariable("idPiatto") String idPiatto){
+        LOGGER.debug("New request to /persist/{idPiatto}");
+        PietanzaDto pietanza = menuGiornoService.persistPietanza(idPiatto);
+        DeVeterisResponse<PietanzaDto> response = new DeVeterisResponse<>();
+        response.setBody(pietanza);
+        LOGGER.debug("Sending response from /persist/{idPiatto}");
         return ResponseEntity.ok(response);
     }
 

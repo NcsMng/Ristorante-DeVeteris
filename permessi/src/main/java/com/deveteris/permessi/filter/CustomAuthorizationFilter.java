@@ -31,7 +31,6 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@PropertySource("classpath:security.properties")
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthorizationFilter.class);
 

@@ -1,11 +1,15 @@
 package com.deveteris.cucina.services.impl;
 
+import com.deveteris.cucina.dto.PiattoMenuGiornoDto;
+import com.deveteris.cucina.dto.PietanzaDto;
+import com.deveteris.cucina.exception.PietanzaNonTrovataException;
 import com.deveteris.cucina.mapper.MenuGiornoMapper;
+import com.deveteris.cucina.mapper.PietanzaMapper;
+import com.deveteris.cucina.model.PiattoMenuGiorno;
 import com.deveteris.cucina.model.Pietanza;
 import com.deveteris.cucina.repository.MenuGiornoRepository;
 import com.deveteris.cucina.repository.PietanzaRepository;
 import com.deveteris.cucina.request.MenuGiornoRequest;
-import com.deveteris.cucina.model.MenuGiorno;
 import com.deveteris.cucina.response.PersistMenuGiornoResponse;
 import com.deveteris.cucina.services.MenuGiornoService;
 import org.springframework.stereotype.Service;
@@ -21,24 +25,25 @@ public class MenuGiornoServiceImpl implements MenuGiornoService {
     private final MenuGiornoRepository menuGiornoRepository;
     private final MenuGiornoMapper menuGiornoMapper;
     private final PietanzaRepository pietanzaRepository;
+    private final PietanzaMapper pietanzaMapper;
 
-    public MenuGiornoServiceImpl(MenuGiornoRepository menuGiornoRepository, MenuGiornoMapper menuGiornoMapper, PietanzaRepository pietanzaRepository) {
+    public MenuGiornoServiceImpl(MenuGiornoRepository menuGiornoRepository, MenuGiornoMapper menuGiornoMapper, PietanzaRepository pietanzaRepository, PietanzaMapper pietanzaMapper) {
         this.menuGiornoRepository = menuGiornoRepository;
         this.menuGiornoMapper = menuGiornoMapper;
         this.pietanzaRepository = pietanzaRepository;
+        this.pietanzaMapper = pietanzaMapper;
     }
 
     @Override
-    @Transactional
-    public PersistMenuGiornoResponse persistMenu(MenuGiornoRequest menuGiornoRequest) {
+    public PersistMenuGiornoResponse persistMenu(Set<MenuGiornoRequest> menuGiornoRequest) {
         Set<String> pietanzeNonAggiunte = new HashSet<>();
 
         deleteMenu();
 
         Set<Pietanza> piattiMenu = menuGiornoRequest
-                .getPietanze()
                 .stream()
-                .map(idPietanza -> {
+                .map(piattoMenuGiorno -> {
+                    String idPietanza = piattoMenuGiorno.getPietanza();
                     Optional<Pietanza> optionalPietanza = pietanzaRepository.findById(idPietanza);
                     if (!optionalPietanza.isPresent()) {
                         pietanzeNonAggiunte.add(idPietanza);
@@ -50,19 +55,42 @@ public class MenuGiornoServiceImpl implements MenuGiornoService {
                 .collect(Collectors.toSet());
 
         PersistMenuGiornoResponse response = new PersistMenuGiornoResponse();
-        MenuGiorno menuGiorno = new MenuGiorno();
-        menuGiorno.setPietanze(piattiMenu);
 
-        response.setMenuGiornoDto(
-                menuGiornoMapper.getDtoFromEntity
-                        (menuGiornoRepository.save(menuGiorno)));
+        Set<PiattoMenuGiornoDto> menuGiornoSalvato = piattiMenu.stream().map(piattoMenu -> {
+            PiattoMenuGiorno piattoMenuGiorno = new PiattoMenuGiorno();
+            piattoMenuGiorno.setPietanza(piattoMenu);
+            return menuGiornoMapper.getDtoFromEntity(menuGiornoRepository.save(piattoMenuGiorno));
+        }).collect(Collectors.toSet());
+
+        response.setMenuGiornoDto(menuGiornoSalvato);
         response.setPiattiNonAggiunti(pietanzeNonAggiunte);
 
         return response;
     }
 
     @Override
-    public void deleteMenu() {
+    public Boolean deleteMenu() {
         menuGiornoRepository.deleteAll();
+        return menuGiornoRepository.count() == 0;
+    }
+
+    @Override
+    @Transactional
+    public Boolean deletePiattoFromMenu(String idString) {
+        return menuGiornoRepository.deleteByPietanzaId(idString) == 1;
+    }
+
+    @Override
+    public PietanzaDto persistPietanza(String idString) {
+        return pietanzaRepository
+                .findById(idString)
+                .map(pietanzaEntity -> {
+                    PiattoMenuGiorno entity = new PiattoMenuGiorno();
+                    entity.setPietanza(pietanzaEntity);
+                    PiattoMenuGiorno savedEntity = menuGiornoRepository.save(entity);
+                    return savedEntity.getPietanza();
+                })
+                .map(pietanzaMapper::getPietanzaDtoFromEntity)
+                .orElseThrow(() -> new PietanzaNonTrovataException("Pietenza con id {} non trovata", idString));
     }
 }

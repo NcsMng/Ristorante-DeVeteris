@@ -2,12 +2,9 @@ package com.deveteris.magazzino.mapper;
 
 import com.deveteris.magazzino.model.MateriaPrima;
 import com.deveteris.magazzino.requests.MateriaPrimaRequest;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface MateriaPrimaMapper {
 
     @Mappings({

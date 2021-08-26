@@ -2,7 +2,7 @@ package com.deveteris.notificationsmanager.model;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "piatti_ordinazione")
 public class PiattoOrdinazione extends BaseEntity {
     @Id
     private Integer id;

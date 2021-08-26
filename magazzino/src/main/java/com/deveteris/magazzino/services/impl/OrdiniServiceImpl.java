@@ -41,7 +41,7 @@ public class OrdiniServiceImpl implements OrdiniService {
                             .orElseThrow(() -> new OrdineNonTrovatoException("Ordine con Id {} non trovato", ordine.getId()));
                     Optional.ofNullable(ordine.getDataOrdine()).ifPresent(ordineEntity::setDataOrdine);
                     Optional.ofNullable(ordine.getDataConsegna()).ifPresent(ordineEntity::setDataOrdine);
-                    return ordineEntity;
+                    return ordineRepository.save(ordineEntity);
                 })
                 .orElseGet(() -> {
                     Ordine ordineToSave = new Ordine();

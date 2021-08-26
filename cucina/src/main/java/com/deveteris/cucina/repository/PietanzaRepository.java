@@ -4,5 +4,5 @@ import com.deveteris.cucina.model.Pietanza;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PietanzaRepository extends JpaRepository<Pietanza,String> {
-    boolean deleteByIdEquals(String id);
+    Integer deleteByIdEquals(String id);
 }

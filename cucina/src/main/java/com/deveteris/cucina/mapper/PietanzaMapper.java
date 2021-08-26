@@ -1,13 +1,11 @@
 package com.deveteris.cucina.mapper;
 
+import com.deveteris.cucina.dto.PietanzaDto;
 import com.deveteris.cucina.request.PietanzaRequest;
 import com.deveteris.cucina.model.Pietanza;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",  nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface PietanzaMapper {
 
     @Mappings({
@@ -16,6 +14,8 @@ public interface PietanzaMapper {
             @Mapping(target = "updatedDate", ignore = true),
             @Mapping(target = "creationTime", ignore = true)})
     Pietanza getEntityFromRequest(PietanzaRequest request);
+
+    PietanzaDto getPietanzaDtoFromEntity(Pietanza pietanza);
 
     @Mappings({
             @Mapping(target = "version", ignore = true),

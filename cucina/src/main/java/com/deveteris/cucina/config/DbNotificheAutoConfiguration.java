@@ -1,9 +1,6 @@
-package com.deveteris.clientservices.config;
+package com.deveteris.cucina.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -15,7 +12,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -36,8 +32,6 @@ public class DbNotificheAutoConfiguration {
 
     @Bean
     @Qualifier("notificheDataSource")
-    @Primary
-
 //    @ConfigurationProperties(prefix="notifiche")
     public DataSource notificheDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -50,8 +44,6 @@ public class DbNotificheAutoConfiguration {
 
     @Bean
     @Qualifier("notificheEntityManager")
-    @Primary
-
     public LocalContainerEntityManagerFactoryBean notificheEntityManager() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
@@ -72,7 +64,6 @@ public class DbNotificheAutoConfiguration {
 
     @Bean
     @Qualifier("notificheTransactionManager")
-    @Primary
     public PlatformTransactionManager notificheTransactionManager() {
 
         JpaTransactionManager transactionManager

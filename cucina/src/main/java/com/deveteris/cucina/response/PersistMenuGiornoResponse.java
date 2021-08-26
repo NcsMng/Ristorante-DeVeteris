@@ -1,12 +1,12 @@
 package com.deveteris.cucina.response;
 
-import com.deveteris.cucina.dto.MenuGiornoDto;
+import com.deveteris.cucina.dto.PiattoMenuGiornoDto;
 
 import java.util.Set;
 
 public class PersistMenuGiornoResponse {
     private Set<String> piattiNonAggiunti;
-    private MenuGiornoDto menuGiornoDto;
+    private Set<PiattoMenuGiornoDto> piattoMenuGiornoDto;
 
     public Set<String> getPiattiNonAggiunti() {
         return piattiNonAggiunti;
@@ -16,11 +16,11 @@ public class PersistMenuGiornoResponse {
         this.piattiNonAggiunti = piattiNonAggiunti;
     }
 
-    public MenuGiornoDto getMenuGiornoDto() {
-        return menuGiornoDto;
+    public Set<PiattoMenuGiornoDto> getMenuGiornoDto() {
+        return piattoMenuGiornoDto;
     }
 
-    public void setMenuGiornoDto(MenuGiornoDto menuGiornoDto) {
-        this.menuGiornoDto = menuGiornoDto;
+    public void setMenuGiornoDto(Set<PiattoMenuGiornoDto> piattoMenuGiornoDto) {
+        this.piattoMenuGiornoDto = piattoMenuGiornoDto;
     }
 }

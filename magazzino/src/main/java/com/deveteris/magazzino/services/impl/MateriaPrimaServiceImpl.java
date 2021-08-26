@@ -27,7 +27,7 @@ public class MateriaPrimaServiceImpl implements MateriaPrimaService {
         if (StringUtils.isNotBlank(materiaPrimaRequest.getId())) {
             MateriaPrima materiaPrima = materiaPrimaRepository.findById(materiaPrimaRequest.getId())
                     .orElseThrow(() -> new MateriaPrimaNonTrovataException("Materia con Id {} non trovata!", materiaPrimaRequest.getId()));
-            return materiaPrimaMapper.updateMateriaPrimaFromRequest(materiaPrima, materiaPrimaRequest);
+            return materiaPrimaRepository.save(materiaPrimaMapper.updateMateriaPrimaFromRequest(materiaPrima, materiaPrimaRequest));
         } else {
             return materiaPrimaRepository
                     .save(materiaPrimaMapper.getEntityFromRequest(materiaPrimaRequest));

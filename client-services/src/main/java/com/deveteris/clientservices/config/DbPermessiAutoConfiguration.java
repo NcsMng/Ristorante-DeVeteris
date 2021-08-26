@@ -1,6 +1,7 @@
 package com.deveteris.clientservices.config;
 
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -37,6 +38,7 @@ public class DbPermessiAutoConfiguration {
     }
 
     @Bean
+    @Qualifier("permessiDataSource")
     public DataSource permessiDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.permessi-datasource.driver-class-name")));
@@ -47,6 +49,7 @@ public class DbPermessiAutoConfiguration {
     }
 
     @Bean
+    @Qualifier("permessiEntityManager")
     public LocalContainerEntityManagerFactoryBean permessiEntityManager() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
@@ -63,8 +66,8 @@ public class DbPermessiAutoConfiguration {
         return em;
     }
 
-    @Primary
     @Bean
+    @Qualifier("permessiTransactionManager")
     public PlatformTransactionManager permessiTransactionManager() {
 
         JpaTransactionManager transactionManager

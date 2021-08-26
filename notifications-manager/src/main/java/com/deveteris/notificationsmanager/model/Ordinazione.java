@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "ordinazioni")
 public class Ordinazione extends BaseEntity {
 
     @Id

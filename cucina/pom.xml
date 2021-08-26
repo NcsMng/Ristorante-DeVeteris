@@ -68,6 +68,18 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>resources</directory>
+				<targetPath>${project.build.outputDirectory}</targetPath>
+				<includes>
+					<include>notifications-db.properties</include>
+					<include>permissions-db.properties</include>
+					<include>cucina-db.properties</include>
+					<include>config.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

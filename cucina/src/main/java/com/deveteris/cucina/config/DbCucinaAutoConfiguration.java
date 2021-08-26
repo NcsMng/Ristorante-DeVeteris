@@ -1,9 +1,6 @@
-package com.deveteris.clientservices.config;
+package com.deveteris.cucina.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -15,54 +12,50 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Objects;
 
 @Configuration
-@PropertySource({"classpath:notifications-db.properties"})
+@PropertySource({"classpath:cucina-db.properties"})
 @EnableJpaRepositories(
-        basePackages = {"com.deveteris.notificationsmanager.repository"},
-        entityManagerFactoryRef = "notificheEntityManager",
-        transactionManagerRef = "notificheTransactionManager")
-public class DbNotificheAutoConfiguration {
+        basePackages = {"com.deveteris.cucina.repository"},
+        entityManagerFactoryRef = "cucinaEntityManager",
+        transactionManagerRef = "cucinaTransactionManager")
+public class DbCucinaAutoConfiguration {
     private final Environment env;
 
-    public DbNotificheAutoConfiguration(Environment env) {
+    public DbCucinaAutoConfiguration(Environment env) {
         this.env = env;
     }
 
     @Bean
-    @Qualifier("notificheDataSource")
-    @Primary
-
-//    @ConfigurationProperties(prefix="notifiche")
-    public DataSource notificheDataSource() {
+//    @Primary
+    @Qualifier("cucinaDataSource")
+    public DataSource cucinaDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("notifiche.spring.datasource.driver-class-name")));
-        dataSource.setUrl(env.getProperty("notifiche.spring.datasource.url"));
-        dataSource.setUsername(env.getProperty("notifiche.spring.datasource.username"));
-        dataSource.setPassword(env.getProperty("notifiche.spring.datasource.password"));
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("cucina.spring.datasource.driver-class-name")));
+        dataSource.setUrl(env.getProperty("cucina.spring.datasource.url"));
+        dataSource.setUsername(env.getProperty("cucina.spring.datasource.username"));
+        dataSource.setPassword(env.getProperty("cucina.spring.datasource.password"));
         return dataSource;
     }
 
     @Bean
-    @Qualifier("notificheEntityManager")
-    @Primary
-
-    public LocalContainerEntityManagerFactoryBean notificheEntityManager() {
+//    @Primary
+    @Qualifier("cucinaEntityManager")
+    public LocalContainerEntityManagerFactoryBean cucinaEntityManager() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(notificheDataSource());
-        em.setPackagesToScan("com.deveteris.notificationsmanager.model");
+        em.setDataSource(cucinaDataSource());
+        em.setPackagesToScan("com.deveteris.cucina.model");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto",
-               "update");
+                "update");
         properties.put("hibernate.dialect",
                 "org.hibernate.dialect.MySQL5Dialect");
         em.setJpaPropertyMap(properties);
@@ -71,14 +64,14 @@ public class DbNotificheAutoConfiguration {
     }
 
     @Bean
-    @Qualifier("notificheTransactionManager")
-    @Primary
-    public PlatformTransactionManager notificheTransactionManager() {
+//    @Primary
+    @Qualifier("cucinaTransactionManager")
+    public PlatformTransactionManager cucinaTransactionManager() {
 
         JpaTransactionManager transactionManager
                 = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(
-                notificheEntityManager().getObject());
+                cucinaEntityManager().getObject());
         return transactionManager;
     }
 }

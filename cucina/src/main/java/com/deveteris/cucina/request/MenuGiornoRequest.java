@@ -1,23 +1,20 @@
 package com.deveteris.cucina.request;
 
-import java.util.Set;
-
-
 public class MenuGiornoRequest {
-    private Set<String> pietanze;
+    private String pietanza;
 
-    public MenuGiornoRequest(Set<String> pietanze) {
-        this.pietanze = pietanze;
+    public MenuGiornoRequest(String pietanze) {
+        this.pietanza = pietanze;
     }
 
     public MenuGiornoRequest() {
     }
 
-    public Set<String> getPietanze() {
-        return pietanze;
+    public String getPietanza() {
+        return pietanza;
     }
 
-    public void setPietanze(Set<String> pietanze) {
-        this.pietanze = pietanze;
+    public void setPietanza(String pietanza) {
+        this.pietanza = pietanza;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication()
+@SpringBootApplication
 @EnableScheduling
 @EnableAsync
 @PropertySource({"classpath:notifications-db.properties", "classpath:permissions-db.properties"})

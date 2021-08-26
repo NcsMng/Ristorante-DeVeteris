@@ -1,12 +1,18 @@
 package com.deveteris.cucina.services;
 
+import com.deveteris.cucina.dto.PietanzaDto;
 import com.deveteris.cucina.request.MenuGiornoRequest;
-import com.deveteris.cucina.model.MenuGiorno;
 import com.deveteris.cucina.response.PersistMenuGiornoResponse;
+
+import java.util.Set;
 
 public interface MenuGiornoService {
 
-    PersistMenuGiornoResponse persistMenu(MenuGiornoRequest menuGiornoRequest);
+    PersistMenuGiornoResponse persistMenu(Set<MenuGiornoRequest> menuGiornoRequest);
 
-    void deleteMenu();
+    Boolean deleteMenu();
+
+    Boolean deletePiattoFromMenu(String idString);
+
+    PietanzaDto persistPietanza(String idString);
 }

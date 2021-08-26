@@ -1,8 +1,6 @@
 package com.deveteris.cucina.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Pietanza extends BaseEntity {
@@ -22,6 +20,9 @@ public class Pietanza extends BaseEntity {
 
     @Column(name = "descrizione", length = 500)
     private String descrizione;
+
+    @OneToOne(mappedBy = "pietanza", cascade = CascadeType.REMOVE)
+    private PiattoMenuGiorno piattoMenuGiorno;
 
     public Pietanza(String id, Double prezzo, Integer tempoPreparazioneMinuti, String nomePiatto, String descrizione) {
         this.id = id;

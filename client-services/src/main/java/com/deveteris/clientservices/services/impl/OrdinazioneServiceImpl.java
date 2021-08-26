@@ -29,7 +29,6 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
     //Save or Update Entity via DTO
     //Metodo per Camerieri
     @Override
-    @Transactional
     public OrdinazioneDto persistOrdinazione(OrdinazioneRequest ordinazioneRequest) {
         Ordinazione entity = Optional.ofNullable(ordinazioneRequest.getId())
                 .map(ordinazioneId ->
@@ -38,9 +37,8 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
                             .orElseThrow(() -> new OrdinazioneNonTrovataException("Ordinazione con id {} non trovata", ordinazioneId));
                     return ordinazioneMapper.updateOrdinazioneFromRequest(ordinazione, ordinazioneRequest);
                 })
-                .orElseGet(() -> ordinazioniRepository
-                        .save(ordinazioneMapper.getEntityFromRequest(ordinazioneRequest)));
-        return ordinazioneMapper.getDtoFromEntity(entity);
+                .orElseGet(() -> ordinazioneMapper.getEntityFromRequest(ordinazioneRequest));
+        return ordinazioneMapper.getDtoFromEntity(ordinazioniRepository.save(entity));
     }
 
     @Override
@@ -60,7 +58,6 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
     }
 
     @Override
-    @Transactional
     //Metodo per Clienti. Si puo' modificare solo se si ha l'uuid dell'ordine, altrimenti si crea nuovo ordine
     public OrdinazioneDto persistOrdinazione(OrdinazioneRequest ordinazioneRequest, String uuidOrdine) {
         Ordinazione savedEntity;
@@ -69,9 +66,9 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
                     .orElseThrow(() -> new OrdinazioneNonTrovataException("Ordinazione con uuid {} non trovato", uuidOrdine));
             savedEntity = ordinazioneMapper.updateOrdinazioneFromRequest(ordinazione, ordinazioneRequest);
         } else {
-            savedEntity = ordinazioniRepository.save(ordinazioneMapper.getEntityFromRequest(ordinazioneRequest));
+            savedEntity = ordinazioneMapper.getEntityFromRequest(ordinazioneRequest);
         }
-        return ordinazioneMapper.getDtoFromEntity(savedEntity);
+        return ordinazioneMapper.getDtoFromEntity(ordinazioniRepository.save(savedEntity));
     }
 
     @Override

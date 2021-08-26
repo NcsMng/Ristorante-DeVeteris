@@ -8,6 +8,7 @@ import com.deveteris.notificationsmanager.model.Ordinazione;
 import com.deveteris.notificationsmanager.model.PiattoOrdinazione;
 import com.deveteris.notificationsmanager.repository.OrdinazioniRepository;
 import com.deveteris.cucina.services.CucinaService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -30,7 +31,7 @@ public class CucinaServiceImpl implements CucinaService {
     }
 
     @Override
-    @Scheduled(cron = "")
+    @Scheduled(cron = "${process-notifications.cron}")
     public void processNotifications() {
         List<Ordinazione> allByStatoEquals = ordinazioniRepository.findAllByStatoNot(StatoOrdinazione.PRONTO);
         if (!CollectionUtils.isEmpty(allByStatoEquals)) {

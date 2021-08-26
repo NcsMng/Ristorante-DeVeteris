@@ -1,9 +1,7 @@
-package com.deveteris.clientservices.config;
+package com.deveteris.cucina.config;
+
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -22,63 +20,60 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @Configuration
-@PropertySource({"classpath:notifications-db.properties"})
+@PropertySource({"classpath:permissions-db.properties"})
+@EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = {"com.deveteris.notificationsmanager.repository"},
-        entityManagerFactoryRef = "notificheEntityManager",
-        transactionManagerRef = "notificheTransactionManager")
-public class DbNotificheAutoConfiguration {
+        basePackages = {"com.deveteris.permessi.repository"},
+        entityManagerFactoryRef = "permessiEntityManager",
+        transactionManagerRef = "permessiTransactionManager")
+public class DbPermessiAutoConfiguration {
+
     private final Environment env;
 
-    public DbNotificheAutoConfiguration(Environment env) {
+    public DbPermessiAutoConfiguration(Environment env) {
         this.env = env;
     }
 
     @Bean
-    @Qualifier("notificheDataSource")
     @Primary
-
-//    @ConfigurationProperties(prefix="notifiche")
-    public DataSource notificheDataSource() {
+    @Qualifier("permessiDataSource")
+    public DataSource permessiDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("notifiche.spring.datasource.driver-class-name")));
-        dataSource.setUrl(env.getProperty("notifiche.spring.datasource.url"));
-        dataSource.setUsername(env.getProperty("notifiche.spring.datasource.username"));
-        dataSource.setPassword(env.getProperty("notifiche.spring.datasource.password"));
+        dataSource.setDriverClassName(Objects.requireNonNull(env.getProperty("spring.permessi-datasource.driver-class-name")));
+        dataSource.setUrl(env.getProperty("spring.permessi-datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.permessi-datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.permessi-datasource.password"));
         return dataSource;
     }
 
     @Bean
-    @Qualifier("notificheEntityManager")
     @Primary
-
-    public LocalContainerEntityManagerFactoryBean notificheEntityManager() {
+    @Qualifier("permessiEntityManager")
+    public LocalContainerEntityManagerFactoryBean permessiEntityManager() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(notificheDataSource());
-        em.setPackagesToScan("com.deveteris.notificationsmanager.model");
+        em.setDataSource(permessiDataSource());
+        em.setPackagesToScan("com.deveteris.permessi.model");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto",
-               "update");
-        properties.put("hibernate.dialect",
-                "org.hibernate.dialect.MySQL5Dialect");
+        properties.put("hibernate.hbm2ddl.auto", "update");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         em.setJpaPropertyMap(properties);
 
         return em;
     }
 
     @Bean
-    @Qualifier("notificheTransactionManager")
     @Primary
-    public PlatformTransactionManager notificheTransactionManager() {
+    @Qualifier("permessiTransactionManager")
+    public PlatformTransactionManager permessiTransactionManager() {
 
         JpaTransactionManager transactionManager
                 = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(
-                notificheEntityManager().getObject());
+                permessiEntityManager().getObject());
         return transactionManager;
     }
 }

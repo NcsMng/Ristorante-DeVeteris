@@ -22,17 +22,16 @@ public class FornitoriServiceImpl implements FornitoriService {
     }
 
     @Override
-    @Transactional
     public Fornitore persistFornitore(FornitoreRequest fornitoreRequest) {
-        return Optional.ofNullable(fornitoreRequest.getId())
+        Fornitore fornitoreEntity = Optional.ofNullable(fornitoreRequest.getId())
                 .map(fornitoreId ->
                 {
                     Fornitore fornitore = fornitoreRepository.findById(fornitoreId)
                             .orElseThrow(() -> new FornitoreNonTrovatoException("Fornitore con id {} non trovata", fornitoreId));
                     return fornitoreMapper.updateFornitoreFromRequest(fornitore, fornitoreRequest);
                 })
-                .orElseGet(() -> fornitoreRepository
-                        .save(fornitoreMapper.getEntityFromRequest(fornitoreRequest)));
+                .orElseGet(() -> fornitoreMapper.getEntityFromRequest(fornitoreRequest));
+        return fornitoreRepository.save(fornitoreEntity);
     }
 
     @Override
