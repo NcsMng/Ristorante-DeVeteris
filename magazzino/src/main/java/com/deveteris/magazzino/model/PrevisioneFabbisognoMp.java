@@ -15,7 +15,7 @@ public class PrevisioneFabbisognoMp {
     private Double quantita;
 
     @Column(name = "qta_non_usata")
-    private Double qtaNonUsata;
+    private Double qtaNonUsata= 0.0;
 
     @ManyToOne
     @JoinColumn(name="id_materia_prima", nullable=false)

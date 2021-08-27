@@ -146,7 +146,7 @@ public class OrdiniServiceImpl implements OrdiniService {
     }
     @Transactional
     @Override
-//    @Async
+    @Async
     public void analizeOrdiniAnnoPrecedente() {
         Map<String, Set<QuantitaMeseMp>> mapMPQTAUltimoAnnoPerMese = new HashMap<>();
         int lastYear = LocalDate.now().getYear() - 1;
@@ -186,16 +186,10 @@ public class OrdiniServiceImpl implements OrdiniService {
         mapMPQTAUltimoAnnoPerMese.forEach((idMp, previsioniPerMese) -> previsioniPerMese
                 .forEach(quantitaMeseMp -> {
                     PrevisioneFabbisognoMp previsioneFabbisognoMp = previsioneFabbisognoMpRepository.findByMeseEqualsAndMateriaPrima_Id(quantitaMeseMp.getNumeroMese(), idMp)
-                            .orElseGet(() -> mapper.getEntityFromDto(quantitaMeseMp, idMp));
+                            .orElseGet(() -> mapper.getEntityFromDto(quantitaMeseMp, idMp,materiaPrimaRepository));
                     quantitaMeseMp.subtractQuantita(previsioneFabbisognoMp.getQtaNonUsata());
                     previsioneFabbisognoMp.setQuantita(quantitaMeseMp.getQuantita());
                     previsioneFabbisognoMpRepository.save(previsioneFabbisognoMp);
                 }));
-    }
-
-    private void setQuantitaNonUsata(){
-        previsioneFabbisognoMpRepository
-                .findAll()
-                .forEach(previsioneFabbisognoMp -> previsioneFabbisognoMp.setQtaNonUsata(previsioneFabbisognoMp.getMateriaPrima().getQuantita()));
     }
 }

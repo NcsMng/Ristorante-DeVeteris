@@ -14,16 +14,16 @@ public interface PrevisioneFabbisognoMpMapper {
     @Mapping(target = "mese", source = "quantitaMeseMp.numeroMese")
     @Mapping(target = "materiaPrima", ignore = true)
     @Mapping(target = "id", ignore = true)
-    PrevisioneFabbisognoMp getEntityFromDto(QuantitaMeseMp quantitaMeseMp, String idMp);
+    PrevisioneFabbisognoMp getEntityFromDto(QuantitaMeseMp quantitaMeseMp, String idMp, @Context MateriaPrimaRepository repository);
 
     @AfterMapping
-    default void getEntityFromDto(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, QuantitaMeseMp quantitaMeseMp, String idMp, @Context MateriaPrimaRepository repository){
+    default void getEntityFromDto(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, String idMp, @Context MateriaPrimaRepository repository){
         repository.findById(idMp).ifPresent(previsioneFabbisognoMp::setMateriaPrima);
     }
 
-    @Mapping(target = "qtaNonUsata", ignore = true)
-    @Mapping(target = "mese", ignore = true)
-    @Mapping(target = "materiaPrima", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    PrevisioneFabbisognoMp updateEntityFromQuantitaMeseMp(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, QuantitaMeseMp quantitaMeseMp);
+//    @Mapping(target = "qtaNonUsata", ignore = true)
+//    @Mapping(target = "mese", ignore = true)
+//    @Mapping(target = "materiaPrima", ignore = true)
+//    @Mapping(target = "id", ignore = true)
+//    PrevisioneFabbisognoMp updateEntityFromQuantitaMeseMp(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, QuantitaMeseMp quantitaMeseMp);
 }
