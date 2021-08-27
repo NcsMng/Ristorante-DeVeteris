@@ -1,4 +1,4 @@
-package com.deveteris.cucina.security;
+package com.deveteris.magazzino.security;
 
 
 import com.deveteris.permessi.filter.CustomAuthenticationFilter;
@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/cucina/**").hasAnyAuthority("CUOCO", "MANAGER")
-                .antMatchers("/magazzino/ordini/manipulate").hasAnyAuthority("CUOCO", "MAGAZZINIERE", "MANAGER")
+                .antMatchers("/magazzino/ordini/manipulate").hasAnyAuthority("CUOCO", "MANAGER", "MAGAZZINIERE")
+                .antMatchers("/magazzino/**").hasAnyAuthority("MANAGER","MAGAZZINIERE")
                 .anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

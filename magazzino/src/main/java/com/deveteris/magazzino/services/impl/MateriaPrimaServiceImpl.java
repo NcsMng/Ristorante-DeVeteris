@@ -6,10 +6,14 @@ import com.deveteris.magazzino.exceptions.MateriaPrimaNonTrovataException;
 import com.deveteris.magazzino.repository.MateriaPrimaRepository;
 import com.deveteris.magazzino.requests.MateriaPrimaRequest;
 import com.deveteris.magazzino.services.MateriaPrimaService;
+import dto.MateriaPrimaDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MateriaPrimaServiceImpl implements MateriaPrimaService {
@@ -23,19 +27,36 @@ public class MateriaPrimaServiceImpl implements MateriaPrimaService {
 
     @Override
     @Transactional
-    public MateriaPrima persistMateriaPrima(MateriaPrimaRequest materiaPrimaRequest) {
-        if (StringUtils.isNotBlank(materiaPrimaRequest.getId())) {
-            MateriaPrima materiaPrima = materiaPrimaRepository.findById(materiaPrimaRequest.getId())
-                    .orElseThrow(() -> new MateriaPrimaNonTrovataException("Materia con Id {} non trovata!", materiaPrimaRequest.getId()));
-            return materiaPrimaRepository.save(materiaPrimaMapper.updateMateriaPrimaFromRequest(materiaPrima, materiaPrimaRequest));
-        } else {
-            return materiaPrimaRepository
-                    .save(materiaPrimaMapper.getEntityFromRequest(materiaPrimaRequest));
-        }
+    public MateriaPrimaDto persistMateriaPrima(MateriaPrimaRequest materiaPrimaRequest) {
+        MateriaPrima materiaPrima = Optional.ofNullable(materiaPrimaRequest.getId())
+                .map(materiaPrimaId ->
+                {
+                    MateriaPrima pietanze = materiaPrimaRepository.findById(materiaPrimaId)
+                            .orElseGet(() -> materiaPrimaMapper.getEntityFromRequest(materiaPrimaRequest));
+                    return materiaPrimaMapper.updateMateriaPrimaFromRequest(pietanze, materiaPrimaRequest);
+                })
+                .orElseThrow(() -> new MateriaPrimaNonTrovataException("id necessario per inserimento o modifica materiaPrima!"));
+        return materiaPrimaMapper.getMateriaPrimaDtoFromEntity(materiaPrimaRepository.save(materiaPrima));
     }
 
     @Override
-    public boolean deleteMateriaPrima(String id) {
-        return materiaPrimaRepository.deleteByIdEquals(id);
+    public void deleteMateriaPrima(String id) {
+        materiaPrimaRepository.deleteByIdEquals(id);
+    }
+
+    @Override
+    public Set<MateriaPrimaDto> getAllMateriePrime() {
+        return materiaPrimaRepository
+                .findAll()
+                .stream()
+                .map(materiaPrimaMapper::getMateriaPrimaDtoFromEntity)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public MateriaPrimaDto getMateriaPrimaById(String id) {
+        return materiaPrimaMapper.getMateriaPrimaDtoFromEntity(materiaPrimaRepository
+                .findById(id)
+                .orElseThrow(()-> new MateriaPrimaNonTrovataException("Materia prima con id {} non trovata", id)));
     }
 }

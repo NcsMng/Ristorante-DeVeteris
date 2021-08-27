@@ -1,15 +1,16 @@
 package com.deveteris.magazzino.response;
 
 import com.deveteris.magazzino.model.Ordine;
+import dto.OrdineDto;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class ManipulateOrdineMateriePrimeResponse {
-    private Ordine ordine;
+    private OrdineDto ordine;
     private Set<String> idMPNotFound = new HashSet<>();
 
-    public ManipulateOrdineMateriePrimeResponse(Ordine ordine, Set<String> idMPNotFound) {
+    public ManipulateOrdineMateriePrimeResponse(OrdineDto ordine, Set<String> idMPNotFound) {
         this.ordine = ordine;
         this.idMPNotFound = idMPNotFound;
     }
@@ -17,11 +18,11 @@ public class ManipulateOrdineMateriePrimeResponse {
     public ManipulateOrdineMateriePrimeResponse() {
     }
 
-    public Ordine getOrdine() {
+    public OrdineDto getOrdine() {
         return ordine;
     }
 
-    public void setOrdine(Ordine ordine) {
+    public void setOrdine(OrdineDto ordine) {
         this.ordine = ordine;
     }
 

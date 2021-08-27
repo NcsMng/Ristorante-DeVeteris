@@ -2,6 +2,7 @@ package com.deveteris.magazzino.mapper;
 
 import com.deveteris.magazzino.model.MateriaPrima;
 import com.deveteris.magazzino.requests.MateriaPrimaRequest;
+import dto.MateriaPrimaDto;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -23,4 +24,5 @@ public interface MateriaPrimaMapper {
     })
     MateriaPrima updateMateriaPrimaFromRequest(@MappingTarget MateriaPrima ordinazione, MateriaPrimaRequest ordinazioneRequest);
 
+    MateriaPrimaDto getMateriaPrimaDtoFromEntity(MateriaPrima materiaPrima);
 }

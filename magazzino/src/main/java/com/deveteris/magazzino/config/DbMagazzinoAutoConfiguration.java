@@ -20,7 +20,7 @@ import java.util.Objects;
 @PropertySource({"classpath:magazzino-db.properties"})
 @EnableJpaRepositories(
         basePackages = {"com.deveteris.magazzino.repository"},
-        entityManagerFactoryRef = "magazzinoEntityManager()",
+        entityManagerFactoryRef = "magazzinoEntityManager",
         transactionManagerRef = "magazzinoTransactionManager")
 public class DbMagazzinoAutoConfiguration {
     private final Environment env;
@@ -41,7 +41,7 @@ public class DbMagazzinoAutoConfiguration {
     }
 
     @Bean
-    @Qualifier("magazzinoEntityManager()")
+    @Qualifier("magazzinoEntityManager")
     public LocalContainerEntityManagerFactoryBean magazzinoEntityManager() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();

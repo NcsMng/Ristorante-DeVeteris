@@ -6,10 +6,14 @@ import com.deveteris.magazzino.model.Fornitore;
 import com.deveteris.magazzino.repository.FornitoreRepository;
 import com.deveteris.magazzino.requests.FornitoreRequest;
 import com.deveteris.magazzino.services.FornitoriService;
+import dto.FornitoreDto;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class FornitoriServiceImpl implements FornitoriService {
@@ -22,7 +26,7 @@ public class FornitoriServiceImpl implements FornitoriService {
     }
 
     @Override
-    public Fornitore persistFornitore(FornitoreRequest fornitoreRequest) {
+    public FornitoreDto persistFornitore(FornitoreRequest fornitoreRequest) {
         Fornitore fornitoreEntity = Optional.ofNullable(fornitoreRequest.getId())
                 .map(fornitoreId ->
                 {
@@ -31,11 +35,28 @@ public class FornitoriServiceImpl implements FornitoriService {
                     return fornitoreMapper.updateFornitoreFromRequest(fornitore, fornitoreRequest);
                 })
                 .orElseGet(() -> fornitoreMapper.getEntityFromRequest(fornitoreRequest));
-        return fornitoreRepository.save(fornitoreEntity);
+        return fornitoreMapper.getFornitoreDtoFromEntity(fornitoreRepository.save(fornitoreEntity));
     }
 
     @Override
-    public boolean deleteFornitore(Integer id) {
-        return false;
+    public void deleteFornitore(Integer id) {
+        fornitoreRepository.deleteById(id);
+    }
+
+    @Override
+    public Set<FornitoreDto> getAllFornitori() {
+        return fornitoreRepository
+                .findAll()
+                .stream()
+                .map(fornitoreMapper::getFornitoreDtoFromEntity)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public FornitoreDto getFornitoreById(Integer id) {
+        return fornitoreRepository
+                .findById(id)
+                .map(fornitoreMapper::getFornitoreDtoFromEntity)
+                .orElseThrow(() -> new FornitoreNonTrovatoException("Fornitore con id {} non trovato", id));
     }
 }

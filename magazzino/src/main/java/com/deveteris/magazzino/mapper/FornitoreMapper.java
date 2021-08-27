@@ -2,6 +2,7 @@ package com.deveteris.magazzino.mapper;
 
 import com.deveteris.magazzino.model.Fornitore;
 import com.deveteris.magazzino.requests.FornitoreRequest;
+import dto.FornitoreDto;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -22,5 +23,7 @@ public interface FornitoreMapper {
             @Mapping(target = "ordiniMateriaPrima", ignore = true)
     })
     Fornitore updateFornitoreFromRequest(@MappingTarget Fornitore fornitore, FornitoreRequest fornitoreRequest);
+
+    FornitoreDto getFornitoreDtoFromEntity(Fornitore entity);
 
 }
