@@ -87,8 +87,8 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
     //Metodo per Clienti.
     @Override
     @Transactional
-    public Integer deleteOrdinazione(String uuidOrdine) {
-        return ordinazioniRepository.deleteByUuidEquals(uuidOrdine);
+    public boolean deleteOrdinazione(String uuidOrdine) {
+        return ordinazioniRepository.deleteByUuidEquals(uuidOrdine) == 1;
     }
 
     //Metodo Cameriere

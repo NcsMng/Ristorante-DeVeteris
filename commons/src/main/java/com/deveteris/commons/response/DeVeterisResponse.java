@@ -22,7 +22,7 @@ public class DeVeterisResponse<T> {
     public DeVeterisResponse(){}
 
 
-    public static <T> DeVeterisResponse<T> error(final int code, final String text) {
+    public static <T> DeVeterisResponse<T> error(final String code, final String text) {
         return new DeVeterisResponse<>(new Message(code, text));
     }
     public List<Message> getMessages() {        return messages;

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 public interface MenuGiornoRepository extends JpaRepository<PiattoMenuGiorno,Integer> {
 
@@ -16,4 +17,5 @@ public interface MenuGiornoRepository extends JpaRepository<PiattoMenuGiorno,Int
     Integer deleteByPietanzaId(@Param("idPiatto") String idPiatto);
 
 
+    Optional<PiattoMenuGiorno> findByPietanza_Id(String piattoId);
 }

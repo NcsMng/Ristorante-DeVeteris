@@ -1,15 +1,15 @@
 package com.deveteris.commons.response;
 
 public class Message {
-    private final int code;
+    private final String code;
     private final String text;
 
-    public Message(int code, String text) {
+    public Message(String code, String text) {
         this.code = code;
         this.text = text;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 

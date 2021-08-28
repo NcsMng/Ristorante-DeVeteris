@@ -34,7 +34,6 @@ public class MenuGiornoServiceImpl implements MenuGiornoService {
         this.pietanzaMapper = pietanzaMapper;
     }
 
-
     @Override
     public PersistMenuGiornoResponse persistMenu(Set<MenuGiornoRequest> menuGiornoRequest) {
         Set<String> pietanzeNonAggiunte = new HashSet<>();

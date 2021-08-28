@@ -51,10 +51,10 @@ public class ClientController {
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
     @PostMapping(path = "/delete/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeVeterisResponse<Integer>> deleteOrdinazioneClienti(@PathVariable("uuid") String uuidOrdine){
+    public ResponseEntity<DeVeterisResponse<Boolean>> deleteOrdinazioneClienti(@PathVariable("uuid") String uuidOrdine){
         LOGGER.debug("New request to clienti/ordini/delete");
-        Integer ordinazione = ordinazioneService.deleteOrdinazione(uuidOrdine);
-        DeVeterisResponse<Integer> response = new DeVeterisResponse<>();
+        Boolean ordinazione = ordinazioneService.deleteOrdinazione(uuidOrdine);
+        DeVeterisResponse<Boolean> response = new DeVeterisResponse<>();
         response.setBody(ordinazione);
         LOGGER.debug("Sending response from clienti/ordini/delete");
         return ResponseEntity.ok(response);

@@ -1,6 +1,8 @@
 package com.deveteris.cucina.services.impl;
 
+import com.deveteris.cucina.model.PiattoMenuGiorno;
 import com.deveteris.cucina.model.Pietanza;
+import com.deveteris.cucina.repository.MenuGiornoRepository;
 import com.deveteris.cucina.repository.PietanzaRepository;
 import com.deveteris.cucina.services.CucinaService;
 import com.deveteris.notificationsmanager.enums.StatoOrdinazione;
@@ -27,10 +29,12 @@ public class CucinaServiceImpl implements CucinaService {
 
     private final OrdinazioniRepository ordinazioniRepository;
     private final PietanzaRepository pietanzaRepository;
+    private final MenuGiornoRepository menuGiornoRepository;
 
-    public CucinaServiceImpl(OrdinazioniRepository ordinazioniRepository, PietanzaRepository pietanzaRepository) {
+    public CucinaServiceImpl(OrdinazioniRepository ordinazioniRepository, PietanzaRepository pietanzaRepository, MenuGiornoRepository menuGiornoRepository) {
         this.ordinazioniRepository = ordinazioniRepository;
         this.pietanzaRepository = pietanzaRepository;
+        this.menuGiornoRepository = menuGiornoRepository;
     }
 
     @Override
@@ -72,19 +76,28 @@ public class CucinaServiceImpl implements CucinaService {
                             .stream()
                             .map(PiattoOrdinazione::getCodicePiatto)
                             .filter(codicePiatto -> {
-                                Optional<Pietanza> pietanza = pietanzaRepository.findById(codicePiatto);
-                                if (pietanza.isPresent()) {
-                                    return diff < pietanza.get().getTempoPreparazioneMinuti();
+                                Optional<PiattoMenuGiorno> presenzaMenuGiorno = menuGiornoRepository.findByPietanza_Id(codicePiatto);
+
+                                if (presenzaMenuGiorno.isPresent()) {
+                                    Optional<Pietanza> pietanza = pietanzaRepository.findById(codicePiatto);
+                                    if (pietanza.isPresent()) {
+                                        return diff < pietanza.get().getTempoPreparazioneMinuti();
+                                    } else {
+                                        ordinazione.setStato(StatoOrdinazione.ERRORE);
+                                        return true;
+                                    }
                                 } else {
                                     ordinazione.setStato(StatoOrdinazione.ERRORE);
                                     return true;
                                 }
                             })
                             .findAny();
+
                     if (!anyPiattoNonTerminato.isPresent()) {
                         LOGGER.debug("Ordine {} e' pronto per essere ritirato", ordinazione.getId());
                         ordinazione.setStato(StatoOrdinazione.PRONTO);
                     }
+
                     if (ordinazione.getStato().equals(StatoOrdinazione.ERRORE)) {
                         ordinazione.setCosto(NaN);
                     } else if (!Optional.ofNullable(ordinazione.getCosto()).isPresent()) {
