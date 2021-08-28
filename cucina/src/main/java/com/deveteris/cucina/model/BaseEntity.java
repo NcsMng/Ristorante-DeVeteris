@@ -3,24 +3,21 @@ package com.deveteris.cucina.model;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Version;
+import javax.persistence.*;
 import java.util.Date;
 
-
+@MappedSuperclass
 public abstract class BaseEntity {
 
     @Column(name = "CREATED_DATE", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date creationTime;
+    private Date creationTime = new Date();
 
     @Column(name = "updated_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    private Date updatedDate;
+    private Date updatedDate = new Date();
 
     public BaseEntity(Date creationTime, Date updatedDate, Long version) {
         this.creationTime = creationTime;

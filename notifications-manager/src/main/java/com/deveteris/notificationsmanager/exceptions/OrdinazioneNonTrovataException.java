@@ -1,4 +1,4 @@
-package com.deveteris.clientservices.exception;
+package com.deveteris.notificationsmanager.exceptions;
 
 import com.deveteris.commons.exception.DeVeterisException;
 

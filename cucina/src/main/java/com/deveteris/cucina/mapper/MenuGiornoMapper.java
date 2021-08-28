@@ -1,10 +1,8 @@
 package com.deveteris.cucina.mapper;
 
 import com.deveteris.cucina.dto.PiattoMenuGiornoDto;
-import com.deveteris.cucina.dto.PietanzaDto;
 import com.deveteris.cucina.exception.PietanzaNonTrovataException;
 import com.deveteris.cucina.model.PiattoMenuGiorno;
-import com.deveteris.cucina.model.Pietanza;
 import com.deveteris.cucina.repository.PietanzaRepository;
 import com.deveteris.cucina.request.MenuGiornoRequest;
 import org.mapstruct.*;
@@ -19,7 +17,7 @@ public interface MenuGiornoMapper {
             @Mapping(target = "creationTime", ignore = true),
             @Mapping(target = "pietanza", ignore = true)
     })
-    PiattoMenuGiorno getEntityFromRequest(MenuGiornoRequest request);
+    PiattoMenuGiorno getEntityFromRequest(MenuGiornoRequest request, @Context PietanzaRepository pietanzaRepository);
 
     @AfterMapping
     default void getEntityFromRequest(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository) {
@@ -35,10 +33,10 @@ public interface MenuGiornoMapper {
             @Mapping(target = "creationTime", ignore = true),
             @Mapping(target = "pietanza", ignore = true)
     })
-    PiattoMenuGiorno updateMenuGiornoFromRequest(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest);
+    PiattoMenuGiorno updateMenuGiornoFromRequest(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository);
 
     @AfterMapping
-    default void updateMenuGiornoFromRequest(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository) {
+    default void updateMenuGiornoFrom(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository) {
         piattoMenuGiorno.setPietanza(pietanzaRepository
                 .findById(menuGiornoRequest
                         .getPietanza())
@@ -49,7 +47,7 @@ public interface MenuGiornoMapper {
     @Mappings({
             @Mapping(target = "pietanzaDto", ignore = true)
     })
-    PiattoMenuGiornoDto getDtoFromEntity(PiattoMenuGiorno piattoMenuGiorno);
+    PiattoMenuGiornoDto getDtoFromEntity(PiattoMenuGiorno piattoMenuGiorno, @Context PietanzaMapper pietanzaMapper);
 
     @AfterMapping
     default void getDtoFromEntity(@MappingTarget PiattoMenuGiornoDto piattoMenuGiornoDto, PiattoMenuGiorno piattoMenuGiorno, @Context PietanzaMapper pietanzaMapper) {

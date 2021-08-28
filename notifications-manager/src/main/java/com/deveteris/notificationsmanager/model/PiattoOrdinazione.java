@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity(name = "piatti_ordinazione")
 public class PiattoOrdinazione extends BaseEntity {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "codice_piatto")
@@ -17,7 +18,7 @@ public class PiattoOrdinazione extends BaseEntity {
     private String note;
 
     @ManyToOne
-    @JoinColumn(name = "id_ordinazione", nullable = false)
+    @JoinColumn(name = "id_ordinazione")
     private Ordinazione ordinazione;
 
 

@@ -1,9 +1,9 @@
 package com.deveteris.magazzino.controller;
 
 import com.deveteris.commons.response.DeVeterisResponse;
+import com.deveteris.magazzino.dto.FornitoreDto;
 import com.deveteris.magazzino.requests.FornitoreRequest;
 import com.deveteris.magazzino.services.FornitoriService;
-import dto.FornitoreDto;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -17,6 +17,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/magazzino/fornitori")
+
 public class FornitoriController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FornitoriController.class);

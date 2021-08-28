@@ -17,7 +17,7 @@ public class Ordine extends BaseEntity implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(mappedBy = "ordine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ordine", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<OrdineMateriaPrima> ordiniMateriaPrima = new HashSet<>();
 

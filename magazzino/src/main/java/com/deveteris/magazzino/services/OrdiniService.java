@@ -1,9 +1,9 @@
 package com.deveteris.magazzino.services;
 
-import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
+import com.deveteris.magazzino.dto.OrdineDto;
 import com.deveteris.magazzino.requests.OrdineMateriaPrimaRequest;
 import com.deveteris.magazzino.requests.OrdineRequest;
-import dto.OrdineDto;
+import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 
 import java.util.Set;
 

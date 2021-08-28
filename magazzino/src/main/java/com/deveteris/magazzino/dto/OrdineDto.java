@@ -1,4 +1,4 @@
-package dto;
+package com.deveteris.magazzino.dto;
 
 import com.deveteris.magazzino.enums.StatoOrdine;
 

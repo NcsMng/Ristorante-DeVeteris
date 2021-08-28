@@ -1,8 +1,8 @@
 package com.deveteris.magazzino.mapper;
 
+import com.deveteris.magazzino.dto.MateriaPrimaDto;
 import com.deveteris.magazzino.model.MateriaPrima;
 import com.deveteris.magazzino.requests.MateriaPrimaRequest;
-import dto.MateriaPrimaDto;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

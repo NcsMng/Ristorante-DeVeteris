@@ -17,7 +17,7 @@ public class Fornitore extends BaseEntity implements Serializable {
     private String nome;
     @Column(name = "specializzazione")
     private String specializzazione;
-    @OneToMany(mappedBy = "fornitore",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fornitore",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<OrdineMateriaPrima> ordiniMateriaPrima = new HashSet<>();
 

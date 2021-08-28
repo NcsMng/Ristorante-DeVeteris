@@ -1,16 +1,14 @@
 package com.deveteris.magazzino.services.impl;
 
+import com.deveteris.magazzino.dto.FornitoreDto;
 import com.deveteris.magazzino.exceptions.FornitoreNonTrovatoException;
 import com.deveteris.magazzino.mapper.FornitoreMapper;
 import com.deveteris.magazzino.model.Fornitore;
 import com.deveteris.magazzino.repository.FornitoreRepository;
 import com.deveteris.magazzino.requests.FornitoreRequest;
 import com.deveteris.magazzino.services.FornitoriService;
-import dto.FornitoreDto;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;

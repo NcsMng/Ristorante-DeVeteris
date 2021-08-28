@@ -1,8 +1,8 @@
 package com.deveteris.magazzino.mapper;
 
+import com.deveteris.magazzino.dto.PrevisioneFabbisognoMpDto;
 import com.deveteris.magazzino.model.PrevisioneFabbisognoMp;
 import com.deveteris.magazzino.repository.MateriaPrimaRepository;
-import com.deveteris.magazzino.repository.PrevisioneFabbisognoMpRepository;
 import com.deveteris.magazzino.util.QuantitaMeseMp;
 import org.mapstruct.*;
 
@@ -21,9 +21,12 @@ public interface PrevisioneFabbisognoMpMapper {
         repository.findById(idMp).ifPresent(previsioneFabbisognoMp::setMateriaPrima);
     }
 
-//    @Mapping(target = "qtaNonUsata", ignore = true)
-//    @Mapping(target = "mese", ignore = true)
-//    @Mapping(target = "materiaPrima", ignore = true)
-//    @Mapping(target = "id", ignore = true)
-//    PrevisioneFabbisognoMp updateEntityFromQuantitaMeseMp(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, QuantitaMeseMp quantitaMeseMp);
+    @Mapping(target = "materiaPrima", ignore = true)
+    PrevisioneFabbisognoMpDto getDtoFromEntity(PrevisioneFabbisognoMp previsioneFabbisognoMp,  @Context MateriaPrimaMapper mapper);
+
+    @AfterMapping
+    default void getDtoFromEntity(@MappingTarget PrevisioneFabbisognoMpDto dto, PrevisioneFabbisognoMp previsioneFabbisognoMp, @Context MateriaPrimaMapper mapper){
+        dto.setMateriaPrima(mapper.getMateriaPrimaDtoFromEntity(previsioneFabbisognoMp.getMateriaPrima()));
+    }
+
 }

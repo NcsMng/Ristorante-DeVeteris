@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/clienti/ordini")
+@RequestMapping("/client-services/clienti/ordini")
 public class ClientController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientController.class);
 
@@ -24,7 +24,7 @@ public class ClientController {
         this.ordinazioneService = ordinazioneService;
     }
 
-    @ApiOperation(value = "/clienti/ordini/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/clienti/ordini/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazione salvata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -42,7 +42,7 @@ public class ClientController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/clienti/ordini/delete/{uuid}",  produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/clienti/ordini/delete/{uuid}",  produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazione salvata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -60,7 +60,7 @@ public class ClientController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/clienti/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/clienti/ordini/{uuidOrdine}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazione salvata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),

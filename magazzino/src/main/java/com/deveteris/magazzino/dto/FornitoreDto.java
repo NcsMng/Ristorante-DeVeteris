@@ -1,4 +1,4 @@
-package dto;
+package com.deveteris.magazzino.dto;
 
 public class FornitoreDto {
     private Integer id;

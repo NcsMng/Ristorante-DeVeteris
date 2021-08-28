@@ -1,13 +1,17 @@
 package com.deveteris.magazzino.services.impl;
 
-import com.deveteris.magazzino.mapper.MateriaPrimaMapper;
-import com.deveteris.magazzino.model.MateriaPrima;
+import com.deveteris.magazzino.dto.MateriaPrimaDto;
+import com.deveteris.magazzino.dto.PrevisioneFabbisognoMpDto;
 import com.deveteris.magazzino.exceptions.MateriaPrimaNonTrovataException;
+import com.deveteris.magazzino.mapper.MateriaPrimaMapper;
+import com.deveteris.magazzino.mapper.PrevisioneFabbisognoMpMapper;
+import com.deveteris.magazzino.model.MateriaPrima;
+import com.deveteris.magazzino.model.PrevisioneFabbisognoMp;
 import com.deveteris.magazzino.repository.MateriaPrimaRepository;
+import com.deveteris.magazzino.repository.PrevisioneFabbisognoMpRepository;
+import com.deveteris.magazzino.requests.MateriaNonConsumataRequest;
 import com.deveteris.magazzino.requests.MateriaPrimaRequest;
 import com.deveteris.magazzino.services.MateriaPrimaService;
-import dto.MateriaPrimaDto;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,10 +23,14 @@ import java.util.stream.Collectors;
 public class MateriaPrimaServiceImpl implements MateriaPrimaService {
     private final MateriaPrimaMapper materiaPrimaMapper;
     private final MateriaPrimaRepository materiaPrimaRepository;
+    private final PrevisioneFabbisognoMpRepository previsioneFabbisognoMpRepository;
+    private final PrevisioneFabbisognoMpMapper previsioneFabbisognoMpMapper;
 
-    public MateriaPrimaServiceImpl(MateriaPrimaMapper materiaPrimaMapper, MateriaPrimaRepository materiaPrimaRepository) {
+    public MateriaPrimaServiceImpl(MateriaPrimaMapper materiaPrimaMapper, MateriaPrimaRepository materiaPrimaRepository, PrevisioneFabbisognoMpRepository previsioneFabbisognoMpRepository, PrevisioneFabbisognoMpMapper previsioneFabbisognoMpMapper) {
         this.materiaPrimaMapper = materiaPrimaMapper;
         this.materiaPrimaRepository = materiaPrimaRepository;
+        this.previsioneFabbisognoMpRepository = previsioneFabbisognoMpRepository;
+        this.previsioneFabbisognoMpMapper = previsioneFabbisognoMpMapper;
     }
 
     @Override
@@ -40,8 +48,9 @@ public class MateriaPrimaServiceImpl implements MateriaPrimaService {
     }
 
     @Override
+    @Transactional
     public void deleteMateriaPrima(String id) {
-        materiaPrimaRepository.deleteByIdEquals(id);
+        materiaPrimaRepository.deleteById(id);
     }
 
     @Override
@@ -58,5 +67,16 @@ public class MateriaPrimaServiceImpl implements MateriaPrimaService {
         return materiaPrimaMapper.getMateriaPrimaDtoFromEntity(materiaPrimaRepository
                 .findById(id)
                 .orElseThrow(()-> new MateriaPrimaNonTrovataException("Materia prima con id {} non trovata", id)));
+    }
+
+    @Override
+    public Set<PrevisioneFabbisognoMpDto> insertMateriaPrimaNonConsumataFineMese(Set<MateriaNonConsumataRequest> request) {
+        return request.stream().map(materiaNonConsumata->{
+            PrevisioneFabbisognoMp previsioneFabbisognoMp = previsioneFabbisognoMpRepository
+                    .findByMeseEqualsAndMateriaPrima_Id(materiaNonConsumata.getMese(), materiaNonConsumata.getIdMateriaPrima())
+                    .orElseThrow(() -> new MateriaPrimaNonTrovataException("Materia prima con id {} e mese {} non trovata", materiaNonConsumata.getIdMateriaPrima(), materiaNonConsumata.getMese()));
+            previsioneFabbisognoMp.setQtaNonUsata(materiaNonConsumata.getQuantitaNonUsata());
+            return previsioneFabbisognoMpMapper.getDtoFromEntity(previsioneFabbisognoMpRepository.save(previsioneFabbisognoMp),materiaPrimaMapper);
+        }).collect(Collectors.toSet());
     }
 }

@@ -1,4 +1,4 @@
-package dto;
+package com.deveteris.magazzino.dto;
 
 public class MateriaPrimaDto {
     private String id;

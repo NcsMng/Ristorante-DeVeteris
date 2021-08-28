@@ -3,6 +3,7 @@ package com.deveteris.notificationsmanager.model;
 import com.deveteris.notificationsmanager.enums.StatoOrdinazione;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class Ordinazione extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "note", length = 500)
@@ -26,9 +28,20 @@ public class Ordinazione extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private StatoOrdinazione stato = StatoOrdinazione.IN_ATTESA;
 
-    @OneToMany(mappedBy="ordinazione")
+    @OneToMany(mappedBy="ordinazione", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<PiattoOrdinazione> piattiOrdinazione = new HashSet<>();
 
+    public Ordinazione(Date creationTime, Date updatedDate, Long version, Integer id, String note, String uuid, Double costo, StatoOrdinazione stato, Set<PiattoOrdinazione> piattiOrdinazione) {
+        super(creationTime, updatedDate, version);
+        this.id = id;
+        this.note = note;
+        this.uuid = uuid;
+        this.costo = costo;
+        this.stato = stato;
+        this.piattiOrdinazione = piattiOrdinazione;
+    }
+
+    public Ordinazione(){}
 
     public Integer getId() {
         return id;
@@ -75,6 +88,7 @@ public class Ordinazione extends BaseEntity {
     }
 
     public void setPiattiOrdinazione(Set<PiattoOrdinazione> piattiOrdinazione) {
+        piattiOrdinazione.forEach(piattoOrdinazione -> piattoOrdinazione.setOrdinazione(this));
         this.piattiOrdinazione = piattiOrdinazione;
     }
 }

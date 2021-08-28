@@ -1,10 +1,17 @@
 package com.deveteris.magazzino.requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class OrdineRequest {
     private Integer id;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dataOrdine;
+    @DateTimeFormat (pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat (pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dataConsegna;
 
     public OrdineRequest(Integer id, Date dataOrdine, Date dataConsegna) {

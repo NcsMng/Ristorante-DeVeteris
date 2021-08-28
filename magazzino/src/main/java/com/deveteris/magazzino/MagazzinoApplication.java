@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @PropertySource({"classpath:permissions-db.properties","classpath:magazzino-db.properties","classpath:magazzino-config.properties"})
 @EnableAsync
 @EnableScheduling
+
 public class MagazzinoApplication {
 
 	public static void main(String[] args) {

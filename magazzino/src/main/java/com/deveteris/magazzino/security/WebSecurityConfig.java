@@ -42,6 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/magazzino/ordini/swagger-ui.html").permitAll()
+                .antMatchers("/magazzino/ordini/api-docs").permitAll()
                 .antMatchers("/magazzino/ordini/manipulate").hasAnyAuthority("CUOCO", "MANAGER", "MAGAZZINIERE")
                 .antMatchers("/magazzino/**").hasAnyAuthority("MANAGER","MAGAZZINIERE")
                 .anyRequest().authenticated();

@@ -1,12 +1,11 @@
 package com.deveteris.magazzino.mapper;
 
-import com.deveteris.magazzino.model.MateriaPrima;
+import com.deveteris.magazzino.dto.MateriaPrimaDto;
+import com.deveteris.magazzino.dto.OrdineDto;
 import com.deveteris.magazzino.model.Ordine;
 import com.deveteris.magazzino.model.OrdineMateriaPrima;
 import com.deveteris.magazzino.repository.OrdineMateriaPrimaRepository;
 import com.deveteris.magazzino.requests.OrdineRequest;
-import dto.MateriaPrimaDto;
-import dto.OrdineDto;
 import org.mapstruct.*;
 
 import java.util.Set;
@@ -31,17 +30,17 @@ public interface OrdiniMapper {
     @Mapping(target = "creationTime", ignore = true)
     Ordine updateOrdineFromRequest(@MappingTarget Ordine ordinazione, OrdineRequest ordinazioneRequest);
 
-    OrdineDto getOrdineDtoFromEntity(Ordine materiaPrima);
+    @Mapping(target = "ordiniMateriaPrima", ignore = true)
+    OrdineDto getOrdineDtoFromEntity(Ordine ordine, @Context OrdineMateriaPrimaRepository ordineMateriaPrimaRepository, @Context MateriaPrimaMapper mapper);
 
     @AfterMapping
     default void getOrdineDtoFromEntityAM(@MappingTarget OrdineDto ordineDto, Ordine ordine, @Context OrdineMateriaPrimaRepository ordineMateriaPrimaRepository, @Context MateriaPrimaMapper mapper){
         Set<MateriaPrimaDto> materiePrimeDto = ordineMateriaPrimaRepository
-                .findAllByOrdine(ordine)
+                .findAllByOrdine_Id(ordine.getId())
                 .stream()
                 .map(OrdineMateriaPrima::getMateriaPrima)
                 .map(mapper::getMateriaPrimaDtoFromEntity)
                 .collect(Collectors.toSet());
-
         ordineDto.setOrdiniMateriaPrima(materiePrimeDto);
     }
 

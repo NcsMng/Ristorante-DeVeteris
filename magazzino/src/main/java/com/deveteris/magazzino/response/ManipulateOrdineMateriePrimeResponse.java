@@ -1,7 +1,6 @@
 package com.deveteris.magazzino.response;
 
-import com.deveteris.magazzino.model.Ordine;
-import dto.OrdineDto;
+import com.deveteris.magazzino.dto.OrdineDto;
 
 import java.util.HashSet;
 import java.util.Set;

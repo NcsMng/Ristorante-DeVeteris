@@ -1,21 +1,19 @@
 package com.deveteris.magazzino;
 
-import com.deveteris.magazzino.mapper.PrevisioneFabbisognoMpMapper;
 import com.deveteris.magazzino.model.Ordine;
-import com.deveteris.magazzino.model.PrevisioneFabbisognoMp;
 import com.deveteris.magazzino.repository.OrdineRepository;
-import com.deveteris.magazzino.repository.PrevisioneFabbisognoMpRepository;
+import com.deveteris.magazzino.requests.MpQtaDto;
 import com.deveteris.magazzino.requests.OrdineMateriaPrimaRequest;
 import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 import com.deveteris.magazzino.services.OrdiniService;
-import com.deveteris.magazzino.util.QuantitaMeseMp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.time.*;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @SpringBootTest
@@ -35,12 +33,12 @@ class MagazzinoApplicationTests {
     void testOrdineMateriePrime() {
         OrdineMateriaPrimaRequest request = new OrdineMateriaPrimaRequest();
         request.setIdOrdine(1);
-        Map<String, Double> prodottoOrdinati = new HashMap<>();
-        prodottoOrdinati.put("AGO30", 40.2); //Mi aspetto 70.2
-        prodottoOrdinati.put("AGO40", 20D);
-        prodottoOrdinati.put("AGO50", 10D);
-        prodottoOrdinati.put("ABC10", 10.3);
-        request.setIdMateriePrimeQta(prodottoOrdinati);
+        List<MpQtaDto> list = new ArrayList<>();
+        list.add(new MpQtaDto("AGO30", 40.2)); //Mi aspetto 70.2
+        list.add(new MpQtaDto("AGO40", 20D));
+        list.add(new MpQtaDto("AGO50", 10D));
+        list.add(new MpQtaDto("ABC10", 10.3));
+        request.setIdMateriePrimeQta(list);
         request.setIdFornitore(1);
         request.setDataOrdinazione(new Date());
         ManipulateOrdineMateriePrimeResponse response = ordiniService.manipulateOrdineMateriePrime(request);

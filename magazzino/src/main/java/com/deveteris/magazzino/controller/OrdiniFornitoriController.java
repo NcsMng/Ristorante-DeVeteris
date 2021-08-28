@@ -1,11 +1,12 @@
 package com.deveteris.magazzino.controller;
 
 import com.deveteris.commons.response.DeVeterisResponse;
+import com.deveteris.magazzino.dto.OrdineDto;
 import com.deveteris.magazzino.requests.OrdineMateriaPrimaRequest;
 import com.deveteris.magazzino.requests.OrdineRequest;
 import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 import com.deveteris.magazzino.services.OrdiniService;
-import dto.OrdineDto;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/magazzino/ordini")
+@Api("prova")
 public class OrdiniFornitoriController {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrdiniFornitoriController.class);
     private final OrdiniService ordiniService;
@@ -44,15 +46,15 @@ public class OrdiniFornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/ordini/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/ordini/persist", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Ordine salvato correttamente", response = Boolean.class),
+            @ApiResponse(code = 200, message = "Ordine salvato correttamente", response = OrdineDto .class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
-    @PostMapping(path = "/persist", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/persist", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeVeterisResponse<OrdineDto>> persistOrdine(@RequestBody OrdineRequest ordiniRequest) {
         LOGGER.debug("New request to /ordini/persist");
         OrdineDto ordini = ordiniService.persistOrdine(ordiniRequest);

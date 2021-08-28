@@ -22,16 +22,20 @@ public class MateriaPrima extends BaseEntity implements Serializable {
     @Column(name = "descrizione")
     private String descrizione;
 
-    @OneToMany(mappedBy = "materiaPrima",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "materiaPrima",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     private Set<OrdineMateriaPrima> ordiniMateriaPrima = new HashSet<>();
 
-    public MateriaPrima(String id, String nome, Double quantita, String descrizione, Set<OrdineMateriaPrima> ordiniMateriaPrima) {
+    @OneToMany(mappedBy = "materiaPrima", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<PrevisioneFabbisognoMp> previsioniFabbisognoMensile = new HashSet<>();
+
+    public MateriaPrima(String id, String nome, Double quantita, String descrizione, Set<OrdineMateriaPrima> ordiniMateriaPrima, Set<PrevisioneFabbisognoMp> previsioniFabbisognoMensile) {
         this.id = id;
         this.nome = nome;
         this.quantita = quantita;
         this.descrizione = descrizione;
         this.ordiniMateriaPrima = ordiniMateriaPrima;
+        this.previsioniFabbisognoMensile = previsioniFabbisognoMensile;
     }
 
     public MateriaPrima() {
@@ -75,5 +79,13 @@ public class MateriaPrima extends BaseEntity implements Serializable {
 
     public void setOrdiniMateriaPrima(Set<OrdineMateriaPrima> ordiniMateriaPrima) {
         this.ordiniMateriaPrima = ordiniMateriaPrima;
+    }
+
+    public Set<PrevisioneFabbisognoMp> getPrevisioniFabbisognoMensile() {
+        return previsioniFabbisognoMensile;
+    }
+
+    public void setPrevisioniFabbisognoMensile(Set<PrevisioneFabbisognoMp> previsioniFabbisognoMensile) {
+        this.previsioniFabbisognoMensile = previsioniFabbisognoMensile;
     }
 }

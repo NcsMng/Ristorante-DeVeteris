@@ -1,7 +1,7 @@
 package com.deveteris.clientservices.controller;
 
-import com.deveteris.clientservices.request.OrdinazioneRequest;
 import com.deveteris.clientservices.dto.OrdinazioneDto;
+import com.deveteris.clientservices.request.OrdinazioneRequest;
 import com.deveteris.clientservices.services.OrdinazioneService;
 import com.deveteris.commons.response.DeVeterisResponse;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/staff/ordini")
+@RequestMapping("/client-services/staff/ordini")
 public class StaffController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientController.class);
 
@@ -26,7 +26,7 @@ public class StaffController {
         this.ordinazioneService = ordinazioneService;
     }
 
-    @ApiOperation(value = "/staff/ordini/delete/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini/delete/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazione cancellata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -44,7 +44,7 @@ public class StaffController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/staff/ordini/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazione salvata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -62,7 +62,7 @@ public class StaffController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/staff/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazioni recuperate con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -80,7 +80,7 @@ public class StaffController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/staff/ordini/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazioni recuperata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),

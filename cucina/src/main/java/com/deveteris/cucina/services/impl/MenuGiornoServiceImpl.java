@@ -34,6 +34,7 @@ public class MenuGiornoServiceImpl implements MenuGiornoService {
         this.pietanzaMapper = pietanzaMapper;
     }
 
+
     @Override
     public PersistMenuGiornoResponse persistMenu(Set<MenuGiornoRequest> menuGiornoRequest) {
         Set<String> pietanzeNonAggiunte = new HashSet<>();
@@ -59,7 +60,7 @@ public class MenuGiornoServiceImpl implements MenuGiornoService {
         Set<PiattoMenuGiornoDto> menuGiornoSalvato = piattiMenu.stream().map(piattoMenu -> {
             PiattoMenuGiorno piattoMenuGiorno = new PiattoMenuGiorno();
             piattoMenuGiorno.setPietanza(piattoMenu);
-            return menuGiornoMapper.getDtoFromEntity(menuGiornoRepository.save(piattoMenuGiorno));
+            return menuGiornoMapper.getDtoFromEntity(menuGiornoRepository.save(piattoMenuGiorno),pietanzaMapper);
         }).collect(Collectors.toSet());
 
         response.setMenuGiornoDto(menuGiornoSalvato);
@@ -67,7 +68,6 @@ public class MenuGiornoServiceImpl implements MenuGiornoService {
 
         return response;
     }
-
     @Override
     public Boolean deleteMenu() {
         menuGiornoRepository.deleteAll();

@@ -1,21 +1,19 @@
 package com.deveteris.magazzino.services.impl;
 
+import com.deveteris.magazzino.dto.OrdineDto;
+import com.deveteris.magazzino.exceptions.FornitoreNonTrovatoException;
+import com.deveteris.magazzino.exceptions.OrdineNonTrovatoException;
+import com.deveteris.magazzino.mapper.MateriaPrimaMapper;
 import com.deveteris.magazzino.mapper.OrdiniMapper;
 import com.deveteris.magazzino.mapper.PrevisioneFabbisognoMpMapper;
 import com.deveteris.magazzino.model.*;
-import com.deveteris.magazzino.exceptions.FornitoreNonTrovatoException;
-import com.deveteris.magazzino.exceptions.OrdineNonTrovatoException;
-import com.deveteris.magazzino.repository.OrdineRepository;
-import com.deveteris.magazzino.repository.FornitoreRepository;
-import com.deveteris.magazzino.repository.MateriaPrimaRepository;
-import com.deveteris.magazzino.repository.PrevisioneFabbisognoMpRepository;
+import com.deveteris.magazzino.repository.*;
+import com.deveteris.magazzino.requests.MpQtaDto;
 import com.deveteris.magazzino.requests.OrdineMateriaPrimaRequest;
 import com.deveteris.magazzino.requests.OrdineRequest;
 import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 import com.deveteris.magazzino.services.OrdiniService;
 import com.deveteris.magazzino.util.QuantitaMeseMp;
-import dto.OrdineDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -35,15 +33,18 @@ public class OrdiniServiceImpl implements OrdiniService {
     private final OrdiniMapper ordiniMapper;
     private final PrevisioneFabbisognoMpRepository previsioneFabbisognoMpRepository;
     private final PrevisioneFabbisognoMpMapper mapper;
+    private final OrdineMateriaPrimaRepository ordineMateriaPrimaRepository;
+    private final MateriaPrimaMapper materiaPrimaMapper;
 
-
-    public OrdiniServiceImpl(OrdineRepository ordineRepository, FornitoreRepository fornitoreRepository, MateriaPrimaRepository materiaPrimaRepository, OrdiniMapper ordiniMapper, PrevisioneFabbisognoMpRepository previsioneFabbisognoMpRepository, PrevisioneFabbisognoMpMapper mapper) {
+    public OrdiniServiceImpl(OrdineRepository ordineRepository, FornitoreRepository fornitoreRepository, MateriaPrimaRepository materiaPrimaRepository, OrdiniMapper ordiniMapper, PrevisioneFabbisognoMpRepository previsioneFabbisognoMpRepository, PrevisioneFabbisognoMpMapper mapper, OrdineMateriaPrimaRepository ordineMateriaPrimaRepository, MateriaPrimaMapper materiaPrimaMapper) {
         this.ordineRepository = ordineRepository;
         this.fornitoreRepository = fornitoreRepository;
         this.materiaPrimaRepository = materiaPrimaRepository;
         this.ordiniMapper = ordiniMapper;
         this.previsioneFabbisognoMpRepository = previsioneFabbisognoMpRepository;
         this.mapper = mapper;
+        this.ordineMateriaPrimaRepository = ordineMateriaPrimaRepository;
+        this.materiaPrimaMapper = materiaPrimaMapper;
     }
 
     @Override
@@ -63,11 +64,10 @@ public class OrdiniServiceImpl implements OrdiniService {
                     ordineToSave.setDataConsegna(ordine.getDataConsegna());
                     return ordineRepository.save(ordineToSave);
                 });
-        return ordiniMapper.getOrdineDtoFromEntity(entity);
+        return ordiniMapper.getOrdineDtoFromEntity(entity, ordineMateriaPrimaRepository, materiaPrimaMapper);
     }
 
     @Override
-    @Transactional
     public ManipulateOrdineMateriePrimeResponse manipulateOrdineMateriePrime(OrdineMateriaPrimaRequest ordineMateriaPrimaRequest) {
         ManipulateOrdineMateriePrimeResponse response = new ManipulateOrdineMateriePrimeResponse();
 
@@ -81,9 +81,13 @@ public class OrdiniServiceImpl implements OrdiniService {
                     Ordine ordine = ordineRepository.findById(idOrdine)
                             .orElseThrow(() -> new OrdineNonTrovatoException("Ordine con Id {} non trovato", idOrdine));
 
-                    Set<OrdineMateriaPrima> ordiniMateriaPrima = ordine.getOrdiniMateriaPrima();
-                    ordineMateriaPrimaRequest
+                    Map<String, Double> mapIdQtaMp = ordineMateriaPrimaRequest
                             .getIdMateriePrimeQta()
+                            .stream()
+                            .collect(Collectors.toMap(MpQtaDto::getIdMp, MpQtaDto::getQta));
+
+                    Set<OrdineMateriaPrima> ordiniMateriaPrima = ordine.getOrdiniMateriaPrima();
+                    mapIdQtaMp
                             .forEach((idMP, qtaMP) -> {
                                 Optional<OrdineMateriaPrima> maybeMateriaPrima = ordiniMateriaPrima
                                         .stream()
@@ -94,6 +98,7 @@ public class OrdiniServiceImpl implements OrdiniService {
                                     OrdineMateriaPrima ordineMateriaPrima = maybeMateriaPrima.get();
                                     Double quantitaOrdinata = ordineMateriaPrima.getQuantitaOrdinata();
                                     ordineMateriaPrima.setQuantitaOrdinata(quantitaOrdinata + qtaMP);
+                                    ordineMateriaPrimaRepository.save(ordineMateriaPrima);
                                 } else {
                                     OrdineMateriaPrima ordineMateriaPrima = new OrdineMateriaPrima();
                                     Optional<MateriaPrima> optionalMateriaPrima = materiaPrimaRepository
@@ -111,7 +116,7 @@ public class OrdiniServiceImpl implements OrdiniService {
 
                                 }
                             });
-                    return ordiniMapper.getOrdineDtoFromEntity(ordineRepository.save(ordine));
+                    return ordiniMapper.getOrdineDtoFromEntity(ordineRepository.save(ordine), ordineMateriaPrimaRepository, materiaPrimaMapper);
                 })
                 .orElseThrow(() -> new OrdineNonTrovatoException("Nessun id fornito per l'ordine da manipolare!"));
         response.setOrdine(ordineToReturn);
@@ -123,7 +128,7 @@ public class OrdiniServiceImpl implements OrdiniService {
         return ordineRepository
                 .findAll()
                 .stream()
-                .map(ordiniMapper::getOrdineDtoFromEntity)
+                .map(ordine -> ordiniMapper.getOrdineDtoFromEntity(ordine, ordineMateriaPrimaRepository, materiaPrimaMapper))
                 .collect(Collectors.toSet());
     }
 
@@ -131,7 +136,7 @@ public class OrdiniServiceImpl implements OrdiniService {
     public OrdineDto getOrdineById(Integer id) {
         return ordineRepository
                 .findById(id)
-                .map(ordiniMapper::getOrdineDtoFromEntity)
+                .map(ordine -> ordiniMapper.getOrdineDtoFromEntity(ordine, ordineMateriaPrimaRepository, materiaPrimaMapper))
                 .orElseThrow(() -> new OrdineNonTrovatoException("ordine con id {} non trovato", id));
     }
 
@@ -141,9 +146,10 @@ public class OrdiniServiceImpl implements OrdiniService {
     }
 
     @Scheduled(cron = "${analizza.ordini-anno-precendente.chron}")
-    void scheduledAnalizeOrdiniAnnoPrecedente(){
+    void scheduledAnalizeOrdiniAnnoPrecedente() {
         analizeOrdiniAnnoPrecedente();
     }
+
     @Transactional
     @Override
     @Async
@@ -186,7 +192,7 @@ public class OrdiniServiceImpl implements OrdiniService {
         mapMPQTAUltimoAnnoPerMese.forEach((idMp, previsioniPerMese) -> previsioniPerMese
                 .forEach(quantitaMeseMp -> {
                     PrevisioneFabbisognoMp previsioneFabbisognoMp = previsioneFabbisognoMpRepository.findByMeseEqualsAndMateriaPrima_Id(quantitaMeseMp.getNumeroMese(), idMp)
-                            .orElseGet(() -> mapper.getEntityFromDto(quantitaMeseMp, idMp,materiaPrimaRepository));
+                            .orElseGet(() -> mapper.getEntityFromDto(quantitaMeseMp, idMp, materiaPrimaRepository));
                     quantitaMeseMp.subtractQuantita(previsioneFabbisognoMp.getQtaNonUsata());
                     previsioneFabbisognoMp.setQuantita(quantitaMeseMp.getQuantita());
                     previsioneFabbisognoMpRepository.save(previsioneFabbisognoMp);

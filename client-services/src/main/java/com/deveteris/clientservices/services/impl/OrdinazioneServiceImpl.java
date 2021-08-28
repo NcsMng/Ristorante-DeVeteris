@@ -1,12 +1,14 @@
 package com.deveteris.clientservices.services.impl;
 
-import com.deveteris.clientservices.exception.OrdinazioneNonTrovataException;
-import com.deveteris.clientservices.request.OrdinazioneRequest;
 import com.deveteris.clientservices.dto.OrdinazioneDto;
 import com.deveteris.clientservices.mapper.OrdinazioneMapper;
+import com.deveteris.clientservices.mapper.PiattoOrdinazioneMapper;
+import com.deveteris.clientservices.request.OrdinazioneRequest;
 import com.deveteris.clientservices.services.OrdinazioneService;
+import com.deveteris.notificationsmanager.exceptions.OrdinazioneNonTrovataException;
 import com.deveteris.notificationsmanager.model.Ordinazione;
 import com.deveteris.notificationsmanager.repository.OrdinazioniRepository;
+import com.deveteris.notificationsmanager.repository.PiattiOrdinazioneRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +22,13 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
 
     private final OrdinazioneMapper ordinazioneMapper;
     private final OrdinazioniRepository ordinazioniRepository;
-
-    public OrdinazioneServiceImpl(OrdinazioneMapper ordinazioneMapper, OrdinazioniRepository ordinazioniRepository) {
+    private final PiattiOrdinazioneRepository piattiOrdinazioneRepository;
+    private final PiattoOrdinazioneMapper piattoOrdinazioneMapper;
+    public OrdinazioneServiceImpl(OrdinazioneMapper ordinazioneMapper, OrdinazioniRepository ordinazioniRepository, PiattiOrdinazioneRepository piattiOrdinazioneRepository, PiattoOrdinazioneMapper piattoOrdinazioneMapper) {
         this.ordinazioneMapper = ordinazioneMapper;
         this.ordinazioniRepository = ordinazioniRepository;
+        this.piattiOrdinazioneRepository = piattiOrdinazioneRepository;
+        this.piattoOrdinazioneMapper = piattoOrdinazioneMapper;
     }
 
     //Save or Update Entity via DTO
@@ -35,10 +40,10 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
                 {
                     Ordinazione ordinazione = ordinazioniRepository.findById(ordinazioneId)
                             .orElseThrow(() -> new OrdinazioneNonTrovataException("Ordinazione con id {} non trovata", ordinazioneId));
-                    return ordinazioneMapper.updateOrdinazioneFromRequest(ordinazione, ordinazioneRequest);
+                    return ordinazioneMapper.updateOrdinazioneFromRequest(ordinazione, ordinazioneRequest, piattiOrdinazioneRepository, piattoOrdinazioneMapper);
                 })
-                .orElseGet(() -> ordinazioneMapper.getEntityFromRequest(ordinazioneRequest));
-        return ordinazioneMapper.getDtoFromEntity(ordinazioniRepository.save(entity));
+                .orElseGet(() -> ordinazioneMapper.getEntityFromRequest(ordinazioneRequest,piattiOrdinazioneRepository,piattoOrdinazioneMapper));
+        return ordinazioneMapper.getDtoFromEntity(ordinazioniRepository.save(entity), piattoOrdinazioneMapper);
     }
 
     @Override
@@ -46,7 +51,7 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
         return ordinazioneMapper
                 .getDtoFromEntity(ordinazioniRepository
                         .findByIdEquals(id)
-                        .orElseThrow(() -> new OrdinazioneNonTrovataException("ordinazione {} non trovata", id)));
+                        .orElseThrow(() -> new OrdinazioneNonTrovataException("ordinazione {} non trovata", id)),piattoOrdinazioneMapper);
     }
 
     @Override
@@ -54,7 +59,7 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
         return ordinazioniRepository
                 .findAll()
                 .stream()
-                .map(ordinazioneMapper::getDtoFromEntity).collect(Collectors.toList());
+                .map(ordinazione -> ordinazioneMapper.getDtoFromEntity(ordinazione,piattoOrdinazioneMapper)).collect(Collectors.toList());
     }
 
     @Override
@@ -64,11 +69,11 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
         if (StringUtils.isNotBlank(uuidOrdine)) {
             Ordinazione ordinazione = ordinazioniRepository.findByUuidEquals(uuidOrdine)
                     .orElseThrow(() -> new OrdinazioneNonTrovataException("Ordinazione con uuid {} non trovato", uuidOrdine));
-            savedEntity = ordinazioneMapper.updateOrdinazioneFromRequest(ordinazione, ordinazioneRequest);
+            savedEntity = ordinazioneMapper.updateOrdinazioneFromRequest(ordinazione, ordinazioneRequest, piattiOrdinazioneRepository,piattoOrdinazioneMapper);
         } else {
-            savedEntity = ordinazioneMapper.getEntityFromRequest(ordinazioneRequest);
+            savedEntity = ordinazioneMapper.getEntityFromRequest(ordinazioneRequest, piattiOrdinazioneRepository, piattoOrdinazioneMapper);
         }
-        return ordinazioneMapper.getDtoFromEntity(ordinazioniRepository.save(savedEntity));
+        return ordinazioneMapper.getDtoFromEntity(ordinazioniRepository.save(savedEntity), piattoOrdinazioneMapper);
     }
 
     @Override
@@ -76,18 +81,20 @@ public class OrdinazioneServiceImpl implements OrdinazioneService {
         return ordinazioneMapper
                 .getDtoFromEntity(ordinazioniRepository
                         .findByUuidEquals(uuid)
-                        .orElseThrow(() -> new OrdinazioneNonTrovataException("Ordine con identificativo passato non esiste")));
+                        .orElseThrow(() -> new OrdinazioneNonTrovataException("Ordine con identificativo passato non esiste")), piattoOrdinazioneMapper);
     }
 
     //Metodo per Clienti.
     @Override
+    @Transactional
     public Integer deleteOrdinazione(String uuidOrdine) {
         return ordinazioniRepository.deleteByUuidEquals(uuidOrdine);
     }
 
     //Metodo Cameriere
     @Override
+    @Transactional
     public boolean deleteOrdinazione(Integer id) {
-        return ordinazioniRepository.deleteByIdEquals(id);
+        return ordinazioniRepository.deleteByIdEquals(id)==1;
     }
 }

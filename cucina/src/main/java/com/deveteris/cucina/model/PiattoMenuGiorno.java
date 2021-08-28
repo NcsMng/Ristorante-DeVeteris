@@ -1,8 +1,6 @@
 package com.deveteris.cucina.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity(name = "menu_giorno")
 public class PiattoMenuGiorno extends BaseEntity {
@@ -10,7 +8,7 @@ public class PiattoMenuGiorno extends BaseEntity {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne()
     @JoinColumn(name = "id_pietanza",referencedColumnName = "id", unique = true, nullable = false)
     private Pietanza pietanza;
 
