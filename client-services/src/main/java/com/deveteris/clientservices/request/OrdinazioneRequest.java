@@ -36,4 +36,6 @@ public class OrdinazioneRequest {
     public void setPiattiOrdinazione(List<PiattoOrdinazioneRequest> piattiOrdinazione) {
         this.piattiOrdinazione = piattiOrdinazione;
     }
+
+
 }

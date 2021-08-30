@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface PiattiOrdinazioneRepository extends JpaRepository<PiattoOrdinazione,Integer> {
-    Optional<PiattoOrdinazione> findByCodicePiatto(String codicePiatto);
+    Optional<PiattoOrdinazione> findByCodicePiattoAndOrdinazione_Id(String codicePiatto, Integer ordinazioneId);
 }

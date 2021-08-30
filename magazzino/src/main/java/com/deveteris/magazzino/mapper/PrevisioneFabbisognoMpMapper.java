@@ -14,18 +14,22 @@ public interface PrevisioneFabbisognoMpMapper {
     @Mapping(target = "mese", source = "quantitaMeseMp.numeroMese")
     @Mapping(target = "materiaPrima", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @BeanMapping(qualifiedByName = "getEntityFromDto")
     PrevisioneFabbisognoMp getEntityFromDto(QuantitaMeseMp quantitaMeseMp, String idMp, @Context MateriaPrimaRepository repository);
 
     @AfterMapping
-    default void getEntityFromDto(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, String idMp, @Context MateriaPrimaRepository repository){
+    @Named("getEntityFromDto")
+    default void getEntityFromDtoAfter(@MappingTarget PrevisioneFabbisognoMp previsioneFabbisognoMp, String idMp, @Context MateriaPrimaRepository repository){
         repository.findById(idMp).ifPresent(previsioneFabbisognoMp::setMateriaPrima);
     }
 
     @Mapping(target = "materiaPrima", ignore = true)
+    @BeanMapping(qualifiedByName = "materiaPrima")
     PrevisioneFabbisognoMpDto getDtoFromEntity(PrevisioneFabbisognoMp previsioneFabbisognoMp,  @Context MateriaPrimaMapper mapper);
 
     @AfterMapping
-    default void getDtoFromEntity(@MappingTarget PrevisioneFabbisognoMpDto dto, PrevisioneFabbisognoMp previsioneFabbisognoMp, @Context MateriaPrimaMapper mapper){
+    @Named("materiaPrima")
+    default void getDtoFromEntityAfter(@MappingTarget PrevisioneFabbisognoMpDto dto, PrevisioneFabbisognoMp previsioneFabbisognoMp, @Context MateriaPrimaMapper mapper){
         dto.setMateriaPrima(mapper.getMateriaPrimaDtoFromEntity(previsioneFabbisognoMp.getMateriaPrima()));
     }
 

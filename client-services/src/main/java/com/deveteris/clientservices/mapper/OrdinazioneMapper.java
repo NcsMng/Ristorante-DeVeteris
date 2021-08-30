@@ -20,18 +20,19 @@ public interface OrdinazioneMapper {
             @Mapping(target = "stato", ignore = true),
             @Mapping(target = "creationTime", ignore = true),
             @Mapping(target = "uuid", ignore = true),
-            @Mapping(target = "piattiOrdinazione", ignore = true)
+            @Mapping(target = "piattiOrdinazione", ignore = true),
+            @Mapping(target = "id", ignore = true)
     })
+    @BeanMapping(qualifiedByName = "getEntityFromRequest")
     Ordinazione getEntityFromRequest(OrdinazioneRequest request, @Context PiattiOrdinazioneRepository repository, @Context PiattoOrdinazioneMapper piattoOrdinazioneMapper);
 
     @AfterMapping
-    default void getEntityFromRequest(@MappingTarget Ordinazione ordinazione, OrdinazioneRequest ordinazioneRequest, @Context PiattiOrdinazioneRepository repository, @Context PiattoOrdinazioneMapper piattoOrdinazioneMapper) {
+    @Named("getEntityFromRequest")
+    default void getEntityFromRequestAfter(@MappingTarget Ordinazione ordinazione, OrdinazioneRequest ordinazioneRequest, @Context PiattiOrdinazioneRepository repository, @Context PiattoOrdinazioneMapper piattoOrdinazioneMapper) {
         ordinazioneRequest.getPiattiOrdinazione().forEach(piattoOrdinazioneRequest -> {
-            PiattoOrdinazione piattoOrdinazione = repository
-                    .findByCodicePiatto(piattoOrdinazioneRequest.getCodicePiatto())
-                    .orElseGet(() -> piattoOrdinazioneMapper.getEntityFromRequest(piattoOrdinazioneRequest));
-            piattoOrdinazione.setOrdinazione(ordinazione);
-            ordinazione.getPiattiOrdinazione().add(piattoOrdinazione);
+            PiattoOrdinazione entityFromRequest = piattoOrdinazioneMapper.getEntityFromRequest(piattoOrdinazioneRequest);
+            entityFromRequest.setOrdinazione(ordinazione);
+            ordinazione.getPiattiOrdinazione().add(entityFromRequest);
         });
     }
 
@@ -45,29 +46,39 @@ public interface OrdinazioneMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "piattiOrdinazione", ignore = true)
     })
+    @BeanMapping(qualifiedByName = "updateOrdinazioneFromRequest")
     Ordinazione updateOrdinazioneFromRequest(@MappingTarget Ordinazione ordinazione, OrdinazioneRequest ordinazioneRequest, @Context PiattiOrdinazioneRepository repository, @Context PiattoOrdinazioneMapper mapper);
 
     @AfterMapping
+    @Named("updateOrdinazioneFromRequest")
     default void updateOrdinazioneFromRequestAfter(@MappingTarget Ordinazione ordinazione, OrdinazioneRequest ordinazioneRequest, @Context PiattiOrdinazioneRepository repository, @Context PiattoOrdinazioneMapper mapper) {
-        ordinazioneRequest.getPiattiOrdinazione().forEach(piattoOrdinazioneRequest -> {
-            Optional<PiattoOrdinazione> optionalPiattoOrdinazione = ordinazione.getPiattiOrdinazione()
-                    .stream()
-                    .filter(piattoOrdinazione -> piattoOrdinazione.getCodicePiatto().equals(piattoOrdinazioneRequest.getCodicePiatto()))
-                    .findAny();
-            if (optionalPiattoOrdinazione.isPresent()) {
-                PiattoOrdinazione piattoOrdinazione = optionalPiattoOrdinazione.get();
-                piattoOrdinazione.setQuantita(piattoOrdinazioneRequest.getQuantita());
-                piattoOrdinazione.setNote(piattoOrdinazioneRequest.getNote());
-            } else {
-                ordinazione.getPiattiOrdinazione().add(mapper.getEntityFromRequest(piattoOrdinazioneRequest));
-            }
-        });
+        ordinazioneRequest.getPiattiOrdinazione()
+                .forEach(piattoOrdinazioneRequest -> {
+                    Optional<PiattoOrdinazione> optionalPiattoOrdinazione = ordinazione.getPiattiOrdinazione()
+                            .stream()
+                            .filter(piattoOrdinazione -> piattoOrdinazione.getCodicePiatto().equals(piattoOrdinazioneRequest.getCodicePiatto()))
+                            .findAny();
+                    if (optionalPiattoOrdinazione.isPresent()) {
+                        PiattoOrdinazione piattoOrdinazione = optionalPiattoOrdinazione.get();
+                        piattoOrdinazione.setQuantita(piattoOrdinazioneRequest.getQuantita());
+                        piattoOrdinazione.setNote(piattoOrdinazioneRequest.getNote());
+                        repository.save(piattoOrdinazione);
+                    } else {
+                        PiattoOrdinazione entityFromRequest = mapper.getEntityFromRequest(piattoOrdinazioneRequest);
+                        ordinazione.getPiattiOrdinazione().add(entityFromRequest);
+                        entityFromRequest.setOrdinazione(ordinazione);
+                        repository.save(entityFromRequest);
+                    }
+                });
+
     }
 
+    @BeanMapping(qualifiedByName = "getDtoFromEntity")
     OrdinazioneDto getDtoFromEntity(Ordinazione ordinazione, @Context PiattoOrdinazioneMapper piattoOrdinazioneMapper);
 
     @AfterMapping
-    default void mapPiattiOrdinazione(Ordinazione ordinazione, @MappingTarget OrdinazioneDto ordinazioneDto, @Context PiattoOrdinazioneMapper mapper) {
+    @Named("getDtoFromEntity")
+    default void getDtoFromEntityAfter(Ordinazione ordinazione, @MappingTarget OrdinazioneDto ordinazioneDto, @Context PiattoOrdinazioneMapper mapper) {
         ordinazioneDto.setPiattiOrdinazione(ordinazione.getPiattiOrdinazione()
                 .stream()
                 .map(mapper::getPiattoDtoFromEntity)

@@ -54,7 +54,7 @@ public class DbMagazzinoAutoConfiguration {
         properties.put("hibernate.hbm2ddl.auto",
                 "update");
         properties.put("hibernate.dialect",
-                "org.hibernate.dialect.MySQL5Dialect");
+                "org.hibernate.dialect.MySQL5InnoDBDialect");
         em.setJpaPropertyMap(properties);
 
         return em;

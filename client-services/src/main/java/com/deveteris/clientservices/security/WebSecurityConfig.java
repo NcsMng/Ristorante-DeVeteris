@@ -4,13 +4,13 @@ package com.deveteris.clientservices.security;
 import com.deveteris.permessi.filter.CustomAuthenticationFilter;
 import com.deveteris.permessi.filter.CustomAuthorizationFilter;
 import com.deveteris.permessi.security.UtenteDetailsServiceImpl;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import org.springframework.context.annotation.*;
-import org.springframework.security.config.annotation.authentication.builders.*;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,9 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-resources/configuration/ui","/swagger-ui.html").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/staff/ordini/**").hasAnyAuthority("CAMERIERE", "CUOCO", "MANAGER")
-                .antMatchers("/clienti/ordini/**").hasAnyAuthority("CAMERIERE", "CUOCO", "MANAGER", "GENERIC_USER")
+                .antMatchers("/client-services/staff/**").hasAnyAuthority("CAMERIERE", "CUOCO", "MANAGER")
+                .antMatchers("/client-services/clienti/**").hasAnyAuthority("CAMERIERE", "CUOCO", "MANAGER", "GENERIC_USER")
                 .anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

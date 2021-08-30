@@ -9,6 +9,7 @@ import com.deveteris.magazzino.services.OrdiniService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -40,7 +41,6 @@ class MagazzinoApplicationTests {
         list.add(new MpQtaDto("ABC10", 10.3));
         request.setIdMateriePrimeQta(list);
         request.setIdFornitore(1);
-        request.setDataOrdinazione(new Date());
         ManipulateOrdineMateriePrimeResponse response = ordiniService.manipulateOrdineMateriePrime(request);
         System.out.println(response);
     }
@@ -54,7 +54,7 @@ class MagazzinoApplicationTests {
         Date dateStartLastYear = Date.from(LocalDateTime.of(lastYear, 1, 1, 0, 0, 0).toInstant(ZoneOffset.UTC));
         Date dateEndLastYear = Date.from(LocalDateTime.of(lastYear, 12, 31, 0, 0, 0).toInstant(ZoneOffset.UTC));
 
-        ordineRepository.getOrdiniPerMeseAnnoPassato(dateStartLastYear, dateEndLastYear)
+        ordineRepository.getOrdiniBetween(dateStartLastYear, dateEndLastYear)
                 .stream().map(Ordine::getOrdiniMateriaPrima).flatMap(Collection::stream)
                 .forEach(ordineMateriaPrima -> {
                     String idMp = ordineMateriaPrima.getMateriaPrima().getId();
@@ -72,8 +72,10 @@ class MagazzinoApplicationTests {
     }
 
     @Test
+    @Rollback(value = false)
     public void testAnalizeOrdiniAnnoPrecedente(){
         ordiniService.analizeOrdiniAnnoPrecedente();
+
     }
 
 }

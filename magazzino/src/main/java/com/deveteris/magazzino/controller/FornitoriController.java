@@ -36,7 +36,7 @@ public class FornitoriController {
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
     @PostMapping(path = "/delete/{idFornitore}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeVeterisResponse<Void>> deleteFornitoreFromMenu(@PathVariable("idFornitore") Integer idFornitore) {
+    public ResponseEntity<DeVeterisResponse<Void>> deleteFornitore(@PathVariable("idFornitore") Integer idFornitore) {
         LOGGER.debug("New request to /delete/{idFornitore}");
         fornitoriService.deleteFornitore(idFornitore);
         DeVeterisResponse<Void> response = new DeVeterisResponse<>();

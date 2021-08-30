@@ -53,7 +53,7 @@ public class MenuController {
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
     @PostMapping(path = "/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeVeterisResponse<Boolean>> deletePiattoFromMenu(@PathVariable("idPiatto") String idPiatto){
+    public ResponseEntity<DeVeterisResponse<Boolean>> deletePiattiFromMenu(@PathVariable("idPiatto") String idPiatto){
         LOGGER.debug("New request to /delete/{idPiatto}");
         Boolean resultOfDelete = menuGiornoService.deletePiattoFromMenu(idPiatto);
         DeVeterisResponse<Boolean> response = new DeVeterisResponse<>();
@@ -71,7 +71,7 @@ public class MenuController {
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
     @PostMapping(path = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeVeterisResponse<Boolean>> deletePiattoFromMenu(){
+    public ResponseEntity<DeVeterisResponse<Boolean>> deletePiattiFromMenu(){
         LOGGER.debug("New request to /delete");
         Boolean deletedAll = menuGiornoService.deleteMenu();
         DeVeterisResponse<Boolean> response = new DeVeterisResponse<>();

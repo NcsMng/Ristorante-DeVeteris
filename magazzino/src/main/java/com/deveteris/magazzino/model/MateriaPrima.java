@@ -11,15 +11,16 @@ import java.util.Set;
 public class MateriaPrima extends BaseEntity implements Serializable {
     static final long serialVersionUID = 223532324L;
     @Id
+    @Column(length = 5)
     private String id;
 
-    @Column(name = "nome")
+    @Column(name = "nome", length = 100)
     private String nome;
 
     @Column(name = "quantita",precision = 2)
     private Double quantita;
 
-    @Column(name = "descrizione")
+    @Column(name = "descrizione", length = 500)
     private String descrizione;
 
     @OneToMany(mappedBy = "materiaPrima",fetch = FetchType.EAGER, cascade = CascadeType.ALL)

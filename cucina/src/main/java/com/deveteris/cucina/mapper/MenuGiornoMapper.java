@@ -17,9 +17,11 @@ public interface MenuGiornoMapper {
             @Mapping(target = "creationTime", ignore = true),
             @Mapping(target = "pietanza", ignore = true)
     })
+    @BeanMapping(qualifiedByName = "getEntityFromRequest")
     PiattoMenuGiorno getEntityFromRequest(MenuGiornoRequest request, @Context PietanzaRepository pietanzaRepository);
 
     @AfterMapping
+    @Named("getEntityFromRequest")
     default void getEntityFromRequest(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository) {
         piattoMenuGiorno
                 .setPietanza(pietanzaRepository.findById(menuGiornoRequest.getPietanza())
@@ -33,10 +35,12 @@ public interface MenuGiornoMapper {
             @Mapping(target = "creationTime", ignore = true),
             @Mapping(target = "pietanza", ignore = true)
     })
+    @BeanMapping(qualifiedByName = "updateMenuGiornoFromRequest")
     PiattoMenuGiorno updateMenuGiornoFromRequest(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository);
 
     @AfterMapping
-    default void updateMenuGiornoFrom(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository) {
+    @Named("updateMenuGiornoFromRequest")
+    default void updateMenuGiornoFromRequestAfter(@MappingTarget PiattoMenuGiorno piattoMenuGiorno, MenuGiornoRequest menuGiornoRequest, @Context PietanzaRepository pietanzaRepository) {
         piattoMenuGiorno.setPietanza(pietanzaRepository
                 .findById(menuGiornoRequest
                         .getPietanza())
@@ -47,9 +51,11 @@ public interface MenuGiornoMapper {
     @Mappings({
             @Mapping(target = "pietanzaDto", ignore = true)
     })
+    @BeanMapping(qualifiedByName = "getDtoFromEntity")
     PiattoMenuGiornoDto getDtoFromEntity(PiattoMenuGiorno piattoMenuGiorno, @Context PietanzaMapper pietanzaMapper);
 
     @AfterMapping
+    @Named("getDtoFromEntity")
     default void getDtoFromEntity(@MappingTarget PiattoMenuGiornoDto piattoMenuGiornoDto, PiattoMenuGiorno piattoMenuGiorno, @Context PietanzaMapper pietanzaMapper) {
         piattoMenuGiornoDto.setPietanzaDto(pietanzaMapper.getPietanzaDtoFromEntity(piattoMenuGiorno.getPietanza()));
     }

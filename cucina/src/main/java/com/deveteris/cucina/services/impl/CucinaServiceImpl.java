@@ -11,6 +11,7 @@ import com.deveteris.notificationsmanager.model.PiattoOrdinazione;
 import com.deveteris.notificationsmanager.repository.OrdinazioniRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +40,7 @@ public class CucinaServiceImpl implements CucinaService {
 
     @Override
     @Scheduled(cron = "${process-notifications.cron}")
+    @Async
     @Transactional
     public void processNotifications() {
         LOGGER.debug("Searching for active notifications...");
@@ -74,6 +76,7 @@ public class CucinaServiceImpl implements CucinaService {
 
                     Optional<String> anyPiattoNonTerminato = ordinazione.getPiattiOrdinazione()
                             .stream()
+                            .filter(piattoOrdinazione -> piattoOrdinazione.getQuantita() > 0)
                             .map(PiattoOrdinazione::getCodicePiatto)
                             .filter(codicePiatto -> {
                                 Optional<PiattoMenuGiorno> presenzaMenuGiorno = menuGiornoRepository.findByPietanza_Id(codicePiatto);
@@ -81,7 +84,7 @@ public class CucinaServiceImpl implements CucinaService {
                                 if (presenzaMenuGiorno.isPresent()) {
                                     Optional<Pietanza> pietanza = pietanzaRepository.findById(codicePiatto);
                                     if (pietanza.isPresent()) {
-                                        return diff < pietanza.get().getTempoPreparazioneMinuti();
+                                        return diff <= pietanza.get().getTempoPreparazioneMinuti();
                                     } else {
                                         ordinazione.setStato(StatoOrdinazione.ERRORE);
                                         return true;

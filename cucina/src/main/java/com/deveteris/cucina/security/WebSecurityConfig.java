@@ -38,9 +38,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-resources/configuration/ui","/swagger-ui.html").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/cucina/**").hasAnyAuthority("CUOCO", "MANAGER")
                 .antMatchers("/magazzino/ordini/manipulate").hasAnyAuthority("CUOCO", "MAGAZZINIERE", "MANAGER")

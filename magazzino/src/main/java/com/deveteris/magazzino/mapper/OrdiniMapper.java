@@ -31,10 +31,12 @@ public interface OrdiniMapper {
     Ordine updateOrdineFromRequest(@MappingTarget Ordine ordinazione, OrdineRequest ordinazioneRequest);
 
     @Mapping(target = "ordiniMateriaPrima", ignore = true)
+    @BeanMapping(qualifiedByName = "getOrdineDtoFromEntity")
     OrdineDto getOrdineDtoFromEntity(Ordine ordine, @Context OrdineMateriaPrimaRepository ordineMateriaPrimaRepository, @Context MateriaPrimaMapper mapper);
 
     @AfterMapping
-    default void getOrdineDtoFromEntityAM(@MappingTarget OrdineDto ordineDto, Ordine ordine, @Context OrdineMateriaPrimaRepository ordineMateriaPrimaRepository, @Context MateriaPrimaMapper mapper){
+    @Named("getOrdineDtoFromEntity")
+    default void getOrdineDtoFromEntityAfter(@MappingTarget OrdineDto ordineDto, Ordine ordine, @Context OrdineMateriaPrimaRepository ordineMateriaPrimaRepository, @Context MateriaPrimaMapper mapper){
         Set<MateriaPrimaDto> materiePrimeDto = ordineMateriaPrimaRepository
                 .findAllByOrdine_Id(ordine.getId())
                 .stream()

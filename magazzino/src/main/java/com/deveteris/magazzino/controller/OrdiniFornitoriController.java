@@ -6,7 +6,6 @@ import com.deveteris.magazzino.requests.OrdineMateriaPrimaRequest;
 import com.deveteris.magazzino.requests.OrdineRequest;
 import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 import com.deveteris.magazzino.services.OrdiniService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -20,7 +19,6 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/magazzino/ordini")
-@Api("prova")
 public class OrdiniFornitoriController {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrdiniFornitoriController.class);
     private final OrdiniService ordiniService;

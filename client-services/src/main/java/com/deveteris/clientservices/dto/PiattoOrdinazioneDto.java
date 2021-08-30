@@ -1,5 +1,7 @@
 package com.deveteris.clientservices.dto;
 
+import java.util.Objects;
+
 public class PiattoOrdinazioneDto {
     private Integer id;
     private String codicePiatto;
@@ -44,5 +46,18 @@ public class PiattoOrdinazioneDto {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PiattoOrdinazioneDto that = (PiattoOrdinazioneDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(codicePiatto, that.codicePiatto) && Objects.equals(quantita, that.quantita) && Objects.equals(note, that.note);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, codicePiatto, quantita, note);
     }
 }

@@ -1,6 +1,7 @@
 package com.deveteris.magazzino.services.impl;
 
 import com.deveteris.magazzino.dto.OrdineDto;
+import com.deveteris.magazzino.enums.StatoOrdine;
 import com.deveteris.magazzino.exceptions.FornitoreNonTrovatoException;
 import com.deveteris.magazzino.exceptions.OrdineNonTrovatoException;
 import com.deveteris.magazzino.mapper.MateriaPrimaMapper;
@@ -14,13 +15,11 @@ import com.deveteris.magazzino.requests.OrdineRequest;
 import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 import com.deveteris.magazzino.services.OrdiniService;
 import com.deveteris.magazzino.util.QuantitaMeseMp;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,13 +54,25 @@ public class OrdiniServiceImpl implements OrdiniService {
                     Ordine ordineEntity = ordineRepository.findById(idOrdine)
                             .orElseThrow(() -> new OrdineNonTrovatoException("Ordine con Id {} non trovato", ordine.getId()));
                     Optional.ofNullable(ordine.getDataOrdine()).ifPresent(ordineEntity::setDataOrdine);
-                    Optional.ofNullable(ordine.getDataConsegna()).ifPresent(ordineEntity::setDataOrdine);
+                    Optional<Date> optionalDataConsegna = Optional.ofNullable(ordine.getDataConsegna());
+                    if(optionalDataConsegna.isPresent()){
+                        ordineEntity.setDataConsegna(optionalDataConsegna.get());
+                        ordineEntity.setStatoOrdine(StatoOrdine.CONSEGNATO);
+                    }else {
+                        ordineEntity.setStatoOrdine(StatoOrdine.IN_ELABORAZIONE);
+                    }
                     return ordineRepository.save(ordineEntity);
                 })
                 .orElseGet(() -> {
                     Ordine ordineToSave = new Ordine();
+                    Optional<Date> optionalDataConsegna = Optional.ofNullable(ordine.getDataConsegna());
+                    if(optionalDataConsegna.isPresent()){
+                        ordineToSave.setDataConsegna(ordine.getDataConsegna());
+                        ordineToSave.setStatoOrdine(StatoOrdine.CONSEGNATO);
+                    }else{
+                        ordineToSave.setStatoOrdine(StatoOrdine.IN_ELABORAZIONE);
+                    }
                     ordineToSave.setDataOrdine(ordine.getDataOrdine());
-                    ordineToSave.setDataConsegna(ordine.getDataConsegna());
                     return ordineRepository.save(ordineToSave);
                 });
         return ordiniMapper.getOrdineDtoFromEntity(entity, ordineMateriaPrimaRepository, materiaPrimaMapper);
@@ -152,7 +163,7 @@ public class OrdiniServiceImpl implements OrdiniService {
 
     @Transactional
     @Override
-    @Async
+//    @Async
     public void analizeOrdiniAnnoPrecedente() {
         Map<String, Set<QuantitaMeseMp>> mapMPQTAUltimoAnnoPerMese = new HashMap<>();
         int lastYear = LocalDate.now().getYear() - 1;
@@ -161,13 +172,14 @@ public class OrdiniServiceImpl implements OrdiniService {
             int numeroGiorniMese = YearMonth.of(lastYear, mese).lengthOfMonth();
 
 
+
             LocalDateTime mezzaNotteStart = LocalDateTime.of(LocalDate.of(lastYear, mese, 1), LocalTime.MIN);
-            Date startMeseUltimoAnno = Date.from(mezzaNotteStart.toInstant(ZoneOffset.UTC));
+            Date startMeseUltimoAnno = Date.from(mezzaNotteStart.toInstant(ZoneId.of("Europe/Rome").getRules().getOffset(Instant.now())));
 
-            LocalDateTime mezzaNotteEnd = LocalDateTime.of(LocalDate.of(lastYear, mese, numeroGiorniMese), LocalTime.MAX).minus(1, ChronoUnit.HOURS);
-            Date endMeseUltimoAnno = Date.from(mezzaNotteEnd.toInstant(ZoneOffset.UTC));
+            LocalDateTime mezzaNotteEnd = LocalDateTime.of(LocalDate.of(lastYear, mese, numeroGiorniMese), LocalTime.MAX);
+            Date endMeseUltimoAnno = Date.from(mezzaNotteEnd.toInstant(ZoneId.of("Europe/Rome").getRules().getOffset(Instant.now())));
 
-            ordineRepository.getOrdiniPerMeseAnnoPassato(startMeseUltimoAnno, endMeseUltimoAnno)
+            ordineRepository.getOrdiniBetween(startMeseUltimoAnno, endMeseUltimoAnno)
                     .forEach(ordine -> {
                         ordine.getOrdiniMateriaPrima().forEach(ordineMateriaPrima -> {
                             String idMp = ordineMateriaPrima.getMateriaPrima().getId();

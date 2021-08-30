@@ -41,11 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger-resources/configuration/ui","/swagger-ui.html").permitAll()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/magazzino/ordini/swagger-ui.html").permitAll()
-                .antMatchers("/magazzino/ordini/api-docs").permitAll()
                 .antMatchers("/magazzino/ordini/manipulate").hasAnyAuthority("CUOCO", "MANAGER", "MAGAZZINIERE")
-                .antMatchers("/magazzino/**").hasAnyAuthority("MANAGER","MAGAZZINIERE")
+                .antMatchers("/magazzino/**").hasAnyAuthority( "MANAGER", "MAGAZZINIERE")
+
+
+
                 .anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
