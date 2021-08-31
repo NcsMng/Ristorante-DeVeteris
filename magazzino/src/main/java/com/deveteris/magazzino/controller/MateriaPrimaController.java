@@ -27,9 +27,9 @@ public class MateriaPrimaController {
         this.materiePrimeService = materiePrimeService;
     }
 
-    @ApiOperation(value = "/magazzino/materie-prime/delete/{idMateriaPrima}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/materie-prime/delete/{idMateriaPrima}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancellazione materia prima")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "MateriaPrima cancellato correttamente", response = Integer.class),
+            @ApiResponse(code = 200, message = "Materia prima cancellata correttamente", response = Integer.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -44,9 +44,9 @@ public class MateriaPrimaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/materie-prime/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/materie-prime/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunta o update materia. ID (5 CHAR) necessario")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "MateriaPrima salvato correttamente", response = Boolean.class),
+            @ApiResponse(code = 200, message = "Materia prima salvata correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -62,9 +62,9 @@ public class MateriaPrimaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/materie-prime", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/materie-prime", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero di tutte le materie prime")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "MateriaPrima recuperati con successo", response = MateriaPrimaDto.class),
+            @ApiResponse(code = 200, message = "Materia prime recuperati con successo", response = MateriaPrimaDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -80,9 +80,9 @@ public class MateriaPrimaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/materie-prime/{idMateriaPrima}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/materie-prime/{idMateriaPrima}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero Materia prima per id")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "MateriaPrima recuperato con successo", response = MateriaPrimaDto.class),
+            @ApiResponse(code = 200, message = "Materia prima recuperata con successo", response = MateriaPrimaDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -97,7 +97,7 @@ public class MateriaPrimaController {
         LOGGER.debug("Sending response from /magazzino/materie-prime/{idMateriaPrima}");
         return ResponseEntity.ok(response);
     }
-    @ApiOperation(value = "/magazzino/materie-prime/non-consumate", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/materie-prime/non-consumate", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunta materie prime non usate mensilmente")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Materie prime non usate salvate correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),

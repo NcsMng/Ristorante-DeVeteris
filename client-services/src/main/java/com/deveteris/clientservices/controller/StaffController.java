@@ -26,9 +26,9 @@ public class StaffController {
         this.ordinazioneService = ordinazioneService;
     }
 
-    @ApiOperation(value = "/client-services/staff/ordini/delete/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini/delete/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancellazione ordine per id")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Ordinazione cancellata con successo", response = OrdinazioneDto.class),
+            @ApiResponse(code = 200, message = "Ordinazione cancellata con successo", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -44,7 +44,7 @@ public class StaffController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/client-services/staff/ordini/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Salva o modifica l'ordinazione se l'id e' passato")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazione salvata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -62,7 +62,7 @@ public class StaffController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/client-services/staff/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero di tutti gli ordini")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazioni recuperate con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -80,7 +80,7 @@ public class StaffController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/client-services/staff/ordini/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/client-services/staff/ordini/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero ordine per id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazioni recuperata con successo", response = OrdinazioneDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),

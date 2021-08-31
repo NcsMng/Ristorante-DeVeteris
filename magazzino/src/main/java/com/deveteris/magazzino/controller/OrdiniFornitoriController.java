@@ -27,7 +27,7 @@ public class OrdiniFornitoriController {
         this.ordiniService = ordiniService;
     }
 
-    @ApiOperation(value = "/magazzino/ordini/delete/{idOrdine}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/ordini/delete/{idOrdine}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancellazione ordine per id passato")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordine cancellato correttamente", response = Integer.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -44,7 +44,7 @@ public class OrdiniFornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/ordini/persist", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/ordini/persist", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE, notes = "Nuovo ordine o aggiornamento ordine se id presente")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordine salvato correttamente", response = OrdineDto .class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -62,9 +62,9 @@ public class OrdiniFornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/ordini", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero tutte le ordinazioni")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Ordine recuperati con successo", response = OrdineDto.class),
+            @ApiResponse(code = 200, message = "Ordini recuperati con successo", response = OrdineDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -98,9 +98,9 @@ public class OrdiniFornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/ordini/manipulate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/ordini/manipulate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Manipolazione ordine. Si puo' aggiungere materia prima oppure modificare quantita di quella presente")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Ordine recuperato con successo", response = OrdineDto.class),
+            @ApiResponse(code = 200, message = "Ordine manipolato con successo", response = OrdineDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),

@@ -26,7 +26,7 @@ public class MenuController {
         this.menuGiornoService = menuGiornoService;
     }
 
-    @ApiOperation(value = "/cucina/menu/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/menu/persist", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Salva o modifica il menu")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Menu salvato correttamente", response = PersistMenuGiornoResponse.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -35,7 +35,7 @@ public class MenuController {
             @ApiResponse(code = 403, message = "L'utente non dispone delle autorizzazioni necessarie per eseguire l'operazione")
     })
     @PostMapping(path = "/persist", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeVeterisResponse<PersistMenuGiornoResponse>> getOrdine(@RequestBody Set<MenuGiornoRequest> menuGiornoRequest){
+    public ResponseEntity<DeVeterisResponse<PersistMenuGiornoResponse>> persistMenu(@RequestBody Set<MenuGiornoRequest> menuGiornoRequest){
         LOGGER.debug("New request to /menu/persist");
         PersistMenuGiornoResponse responseBody = menuGiornoService.persistMenu(new HashSet<>(menuGiornoRequest));
         DeVeterisResponse<PersistMenuGiornoResponse> response = new DeVeterisResponse<>();
@@ -44,9 +44,9 @@ public class MenuController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/cucina/menu/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/menu/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancella piatto dal menu")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Piatto dal menu cancellato correttamente", response = Integer.class),
+            @ApiResponse(code = 200, message = "Piatto dal menu cancellato correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),
@@ -62,7 +62,7 @@ public class MenuController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/cucina/menu/delete", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/menu/delete", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancella il menu")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Menu cancellato correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -80,9 +80,9 @@ public class MenuController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/cucina/menu/persist/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/menu/persist/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunta piatto al menu")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Menu cancellato correttamente", response = Boolean.class),
+            @ApiResponse(code = 200, message = "Piatto aggiunto correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
             @ApiResponse(code = 400, message = "Dati inviati incompleti o errati"),
             @ApiResponse(code = 401, message = "Utente non autorizzato"),

@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -26,7 +25,7 @@ public class PietanzaController {
         this.pietanzeService = pietanzeService;
     }
 
-    @ApiOperation(value = "/cucina/pietanze/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/pietanze/delete/{idPiatto}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancella pietanza dal menu generale")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Piatto dal menu cancellato correttamente", response = Integer.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -43,7 +42,7 @@ public class PietanzaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/cucina/pietanze/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/pietanze/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Salva o modifica piatto dal menu generico. Id 5 CHAR necessario")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Menu cancellato correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -60,7 +59,7 @@ public class PietanzaController {
         LOGGER.debug("Sending response from /pietanze/persist");
         return ResponseEntity.ok(response);
     }
-    @ApiOperation(value = "/cucina/pietanze", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/pietanze", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupera tutte le pietanze del menu generico")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazioni recuperate con successo", response = PietanzaDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -78,7 +77,7 @@ public class PietanzaController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/cucina/pietanze/{idPietanza}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/cucina/pietanze/{idPietanza}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero pietanza per id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Ordinazioni recuperata con successo", response = PietanzaDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),

@@ -27,7 +27,7 @@ public class FornitoriController {
         this.fornitoriService = fornitoriService;
     }
 
-    @ApiOperation(value = "/magazzino/fornitori/delete/{idFornitore}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/fornitori/delete/{idFornitore}", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Cancellazione fornitore per id fornito")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Fornitore cancellato correttamente", response = Integer.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -44,7 +44,7 @@ public class FornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/fornitori/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/fornitori/persist", produces = MediaType.APPLICATION_JSON_VALUE, notes = "Salvataggio o update fornitore se id viene passato")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Fornitore salvato correttamente", response = Boolean.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -62,7 +62,7 @@ public class FornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/fornitori", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/fornitori", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero di tutti i fornitori")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Fornitori recuperati con successo", response = FornitoreDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
@@ -80,7 +80,7 @@ public class FornitoriController {
         return ResponseEntity.ok(response);
     }
 
-    @ApiOperation(value = "/magazzino/fornitori/{idFornitore}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Aggiunge o modifica l'ordine")
+    @ApiOperation(value = "/magazzino/fornitori/{idFornitore}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, notes = "Recupero del fornitore per id passato")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Fornitore recuperato con successo", response = FornitoreDto.class),
             @ApiResponse(code = 500, message = "Errore di sistema"),
