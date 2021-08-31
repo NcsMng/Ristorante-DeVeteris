@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.Double.NaN;
-
 @Service
 public class CucinaServiceImpl implements CucinaService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CucinaServiceImpl.class);
@@ -102,14 +100,14 @@ public class CucinaServiceImpl implements CucinaService {
                     }
 
                     if (ordinazione.getStato().equals(StatoOrdinazione.ERRORE)) {
-                        ordinazione.setCosto(NaN);
+                        ordinazione.setCosto(0.0);
                     } else if (!Optional.ofNullable(ordinazione.getCosto()).isPresent()) {
                         double costoOrdinazione = ordinazione.getPiattiOrdinazione()
                                 .stream()
                                 .mapToDouble(piatto -> {
                                     Optional<Pietanza> entityOptional = pietanzaRepository.findById(piatto.getCodicePiatto());
                                     return entityOptional.map(pietanza -> pietanza.getPrezzo() * piatto.getQuantita())
-                                            .orElse(NaN);
+                                            .orElse(0.0);
                                 }).sum();
                         ordinazione.setCosto(costoOrdinazione);
                     }
