@@ -8,6 +8,7 @@ import com.deveteris.magazzino.model.OrdineMateriaPrima;
 import com.deveteris.magazzino.repository.*;
 import com.deveteris.magazzino.requests.MpQtaDto;
 import com.deveteris.magazzino.requests.OrdineMateriaPrimaRequest;
+import com.deveteris.magazzino.response.ManipulateOrdineMateriePrimeResponse;
 import com.deveteris.magazzino.services.OrdiniService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -24,7 +25,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @Transactional
-
 class MagazzinoApplicationTests {
     private static final Logger LOGGER = LoggerFactory.getLogger(MagazzinoApplicationTests.class);
 
@@ -49,7 +49,7 @@ class MagazzinoApplicationTests {
     @Test
     @Rollback
     @Transactional
-    public void testManipulateOrdini(){
+    public void testManipulateOrdini() {
         Fornitore fornitore = new Fornitore();
         fornitore.setNome("Mare e Terra Srl");
         fornitore.setSpecializzazione("prodotti di terra e mare");
@@ -85,28 +85,22 @@ class MagazzinoApplicationTests {
         ArrayList<MpQtaDto> mpQtaDtos = new ArrayList<>();
         mpQtaDtos.add(mpQtaDto);
         mpQtaDtos.add(mpQtaDto1);
+        mpQtaDtos.add(new MpQtaDto("EPO30", 30.1));
         ordineMateriaPrimaRequest.setIdMateriePrimeQta(mpQtaDtos);
 
-        ordiniService.manipulateOrdineMateriePrime(ordineMateriaPrimaRequest);
+        ManipulateOrdineMateriePrimeResponse manipulateOrdineMateriePrimeResponse = ordiniService.manipulateOrdineMateriePrime(ordineMateriaPrimaRequest);
 
+        assertThat(manipulateOrdineMateriePrimeResponse.getIdMPNotFound()).matches(mpNotFound -> mpNotFound.size() == 1);
         Optional<OrdineMateriaPrima> ordineMp = ordineMateriaPrimaRepository.findByFornitore_IdAndOrdine_IdAndMateriaPrima_Id(fornitoreEntity.getId(), ordineEntity.getId(), mpQtaDto.getIdMp());
         assertThat(ordineMp).isPresent();
-        assertThat(ordineMp.get()).matches(ordineMateriaPrima -> ordineMateriaPrima.getQuantitaOrdinata()==40.4);
-
+        assertThat(ordineMp.get()).matches(ordineMateriaPrima -> ordineMateriaPrima.getQuantitaOrdinata() == 40.4);
         Optional<OrdineMateriaPrima> ordineMp1 = ordineMateriaPrimaRepository.findByFornitore_IdAndOrdine_IdAndMateriaPrima_Id(fornitoreEntity.getId(), ordineEntity.getId(), mpQtaDto1.getIdMp());
         assertThat(ordineMp1).isPresent();
-        assertThat(ordineMp1.get()).matches(ordineMateriaPrima -> ordineMateriaPrima.getQuantitaOrdinata()==100.4);
+        assertThat(ordineMp1.get()).matches(ordineMateriaPrima -> ordineMateriaPrima.getQuantitaOrdinata() == 100.4);
 
-        ordiniService.manipulateOrdineMateriePrime(ordineMateriaPrimaRequest);
 
-        Optional<OrdineMateriaPrima> ordineMp2 = ordineMateriaPrimaRepository.findByFornitore_IdAndOrdine_IdAndMateriaPrima_Id(fornitoreEntity.getId(), ordineEntity.getId(), mpQtaDto.getIdMp());
-        assertThat(ordineMp2).isPresent();
-        assertThat(ordineMp2.get()).matches(ordineMateriaPrima -> ordineMateriaPrima.getQuantitaOrdinata()==80.8);
-
-        Optional<OrdineMateriaPrima> ordineMp3 = ordineMateriaPrimaRepository.findByFornitore_IdAndOrdine_IdAndMateriaPrima_Id(fornitoreEntity.getId(), ordineEntity.getId(), mpQtaDto1.getIdMp());
-        assertThat(ordineMp3).isPresent();
-        assertThat(ordineMp3.get()).matches(ordineMateriaPrima -> ordineMateriaPrima.getQuantitaOrdinata()==200.8);
     }
+
     @Test
     @Rollback
     @Transactional
